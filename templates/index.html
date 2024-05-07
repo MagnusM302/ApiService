@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Træk data fra OIS</h1>
+    Go to users <a href='/users'>here</a><br>
+
+    <form method="POST" action="/">
+        <fieldset>
+        <legend>Søg på en adresse</legend>
+        <input type="text" name="address" placeholder="Adresse">
+        <input type="submit" value="Hit me!">
+        </fieldset>    
+    </form>
+
+{% endblock %}
