@@ -1,25 +1,36 @@
 import os
+import sys
 from flask import Flask
 from flask_cors import CORS
+from multiprocessing import Process
+
+# Setup to include the project directory to sys.path for easier module imports
+api_service_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+if api_service_path not in sys.path:
+    sys.path.append(api_service_path)
+
+# Import local modules
 from app_user.controllers import setup_routes
 from app_user.services import UserService
 from shared.auth_service import JWTService
-import logging
-from logging.handlers import RotatingFileHandler
-from multiprocessing import Process
+
+# Custom module imports from shared
+from shared.custom_logging import setup_logging
+from shared.custom_dotenv import load_env_variables
+
+# Load environment variables using the custom function from shared
+load_env_variables()
+
+# Setup logging using the custom function from shared
+setup_logging()
 
 def create_user_app():
+    """Create and configure an instance of the Flask application."""
     app = Flask(__name__)
-    CORS(app)  # Enable CORS for all routes
-
-    # Set up logging
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-    handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=3)
-    handler.setLevel(logging.INFO)
-    app.logger.addHandler(handler)
+    CORS(app, resources={r"/*": {"origins": "*"}})
 
     # Initialize services with environment variables
-    jwt_secret_key = os.getenv('JWT_SECRET_KEY', 'default_secret_key_here')  # Fallback to a default if not set
+    jwt_secret_key = os.getenv('JWT_SECRET_KEY', 'default_secret_key_here')
     user_service = UserService()
     jwt_service = JWTService(jwt_secret_key)
 
@@ -30,22 +41,14 @@ def create_user_app():
 
 def run_http():
     app = create_user_app()
-    app.run(port=5000)
+    app.run(port=5000, debug=True, use_reloader=False)
 
-def run_https():
-    app = create_user_app()
-    app.run(ssl_context=('cert.pem', 'key.pem'), port=5001)
 
 def run_user_service():
-    # Setup processes for HTTP and HTTPS servers
+    """Run HTTP version of the app in a separate process."""
     http_process = Process(target=run_http)
-    https_process = Process(target=run_https)
-
     http_process.start()
-    https_process.start()
-
-    http_process.join()  # Optionally wait for the HTTP server process to finish
-    https_process.join()  # Optionally wait for the HTTPS server process to finish
+    http_process.join()
 
 if __name__ == '__main__':
     run_user_service()

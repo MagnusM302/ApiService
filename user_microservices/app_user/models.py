@@ -11,7 +11,22 @@ class User:
         self.username = username
         self.email = email
         self.password_hash = password_hash
-        self.role = UserRole[role] if isinstance(role, str) else role
+
+        # Improved role handling
+        if isinstance(role, str):
+            try:
+                self.role = UserRole[role]
+            except KeyError:
+                raise ValueError(f"Invalid role specified: {role}")
+        elif isinstance(role, int):
+            try:
+                self.role = UserRole(role)  # Assuming integer maps directly to the enum
+            except ValueError:
+                raise ValueError(f"Invalid role index specified: {role}")
+        elif isinstance(role, UserRole):
+            self.role = role
+        else:
+            raise TypeError("Role must be a UserRole enum, its string key, or its integer index.")
 
     def __str__(self):
         role_name = self.role.name if self.role else "No Role"

@@ -1,5 +1,5 @@
-from models import User, UserRole
-from dto import UserDTO
+from .models import User, UserRole
+from .dto import UserDTO
 
 
 class UserConverter:
@@ -13,7 +13,7 @@ class UserConverter:
             user_id=user.user_id,
             name=user.name,
             email=user.email,
-            role=user.role
+            role=user.role.name if user.role else "No Role"  # Convert enum to string here
         )
 
     @staticmethod
@@ -26,6 +26,6 @@ class UserConverter:
             _id=dto.user_id,
             name=dto.name,
             email=dto.email,
-            role=dto.role.name if dto.role else None,
+            role=UserRole[dto.role] if dto.role and dto.role in UserRole._member_names_ else None,
             password_hash=password_hash  # Assumed to be handled securely elsewhere
         )

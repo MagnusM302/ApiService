@@ -1,9 +1,9 @@
 import re
 import bcrypt
-from dal import UserRepository
-from models import User, UserRole
-from converters import UserConverter
-from dto import UserDTO
+from .dal import UserRepository
+from .models import User, UserRole
+from .converters import UserConverter
+from .dto import UserDTO
 from shared.auth_service import JWTService
 
 class UserService:
@@ -44,8 +44,10 @@ class UserService:
     def login_user(self, username, password):
         user = self.user_repository.get_user_by_username(username)
         if user and bcrypt.checkpw(password.encode('utf-8'), user.password_hash):
-            token = self.jwt_service.generate_token(user.user_id, user.role)
-            user_id_str = str(user.user_id)
-            return {"token": token, "user_id": user_id_str}
+        # Check if role is an enum before accessing .name
+            role_str = user.role.name if isinstance(user.role, UserRole) else UserRole(user.role).name
+            token = self.jwt_service.generate_token(user.user_id, role_str)
+            return {"token": token, "user_id": str(user.user_id), "role": role_str}
         else:
             raise ValueError("Invalid username or password")
+

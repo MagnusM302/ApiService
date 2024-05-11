@@ -3,11 +3,10 @@ class UserDTO:
         self.user_id = user_id
         self.name = name
         self.email = email
-        self.role = role
+        self.role = role  
 
     def __str__(self):
-        role_name = self.role.name if self.role else "No Role"
-        return f"UserDTO(ID: {self.user_id}, Name: {self.name}, Email: {self.email}, Role: {role_name})"
+        return f"UserDTO(ID: {self.user_id}, Name: {self.name}, Email: {self.email}, Role: {self.role})"
 
     def copy(self):
         """Create a copy of this UserDTO."""

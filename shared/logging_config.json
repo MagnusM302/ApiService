@@ -1,0 +1,28 @@
+
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "handlers": {
+      "fileHandler": {
+        "class": "logging.handlers.RotatingFileHandler",
+        "formatter": "myFormatter",
+        "filename": "app.log",
+        "maxBytes": 10000,
+        "backupCount": 3,
+        "level": "INFO"
+      }
+    },
+    "loggers": {
+      "": {
+        "handlers": ["fileHandler"],
+        "level": "INFO",
+        "propagate": true
+      }
+    },
+    "formatters": {
+      "myFormatter": {
+        "format": "%(asctime)s - %(levelname)s - %(message)s"
+      }
+    }
+  }
+  

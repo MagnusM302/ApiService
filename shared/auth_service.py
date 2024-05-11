@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 from flask import request, jsonify, current_app
 from user_microservices.app_user.models import UserRole
 from functools import wraps
-from config import ALLOWED_SERVICE_IDS
+from .config import ALLOWED_SERVICE_IDS
 
 class JWTService:
     def __init__(self, secret_key, algorithm='HS256'):
