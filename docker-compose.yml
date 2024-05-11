@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  user_microservice:
+    build:
+      context: ./user_microservices
+    ports:
+      - "5001:5001"
+    environment:
+      - FLASK_ENV=development
+
+  report_microservice:
+    build:
+      context: ./report_microservices
+    ports:
+      - "5002:5002"
+    environment:
+      - FLASK_ENV=development
+
+  invoice_microservice:
+    build:
+      context: ./invoice_microservices
+    ports:
+      - "5003:5003"
+    environment:
+      - FLASK_ENV=development
