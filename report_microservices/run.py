@@ -13,7 +13,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from report_microservices.app_report.controllers import setup_routes
 from report_microservices.app_report.services import ReportService
 
-
 # Custom module imports from shared
 from shared.custom_logging import setup_logging
 from shared.custom_dotenv import load_env_variables
