@@ -1,7 +1,7 @@
 from bson.objectid import ObjectId
 from shared.database import Database
-from .enums import UserRole  # Adjust this import based on your project structure
-from .models import User
+from user_microservices.app_user.enums import UserRole  # Adjust this import based on your project structure
+from user_microservices.app_user.models import User
 from enum import Enum  # Ensuring Enum is imported
 
 class UserRepository:

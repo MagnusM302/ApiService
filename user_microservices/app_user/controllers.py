@@ -1,28 +1,23 @@
-import sys
-import os
-# Add the project root to the Python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-
+# user_microservices.app_user.controllers.py
 from flask import request, jsonify
-from shared.auth_service import JWTService
+from shared.auth_service import JWTService  # No changes here, just import
 from shared.json_utils import JsonUtils
 from shared.config import ALLOWED_SERVICE_IDS
-from .services import UserService
+from user_microservices.app_user.services import UserService
 
-def setup_routes(app, user_service, jwt_service):
-    jwt_service = JWTService(secret_key="your_secret_key_here")  # Antager at din hemmelige nøgle er konfigureret her
-    user_service = UserService() 
+def setup_routes(app, user_service):
+    user_service = UserService()  # Assuming UserService doesn't need parameters for initialization
     
     @app.route('/system-token', methods=['POST'])
     def generate_system_token():
         service_id = request.json.get('service_id')
         if service_id in ALLOWED_SERVICE_IDS:
-            token = jwt_service.generate_system_token(service_id)
+            token = JWTService.generate_system_token(service_id)  # Use JWTService directly
             return jsonify({'system_token': token}), 200
         return jsonify({'error': 'Unauthorized service'}), 403
 
     @app.route('/protected-route')
-    @jwt_service.token_required
+    @JWTService.token_required  # Use JWTService directly
     def protected_route():
         return "This is a protected area!"
 
@@ -30,7 +25,7 @@ def setup_routes(app, user_service, jwt_service):
     def register():
         data = request.get_json()
         user_dto = user_service.register_user(**data)
-        token = jwt_service.generate_token(user_dto.user_id, user_dto.role)
+        token = JWTService.generate_token(user_dto.user_id, user_dto.role)  # Use JWTService directly
         return jsonify({'user_id': user_dto.user_id, 'token': token}), 201
 
     @app.route('/login', methods=['POST'])
@@ -42,17 +37,15 @@ def setup_routes(app, user_service, jwt_service):
             return jsonify({'error': 'Username and password are required'}), 400
         try:
             user_dto = user_service.login_user(username, password)
-            token = jwt_service.generate_token(user_dto['user_id'], user_dto['role'])
+            token = JWTService.generate_token(user_dto['user_id'], user_dto['role'])  # Use JWTService directly
             return jsonify({'token': token, 'user_id': user_dto['user_id']})
         except ValueError as e:
             return jsonify({'error': str(e)}), 401
         except KeyError as e:
             return jsonify({'error': 'Missing key in user data: {}'.format(e)}), 500
 
-
-
     @app.route('/users/<user_id>', methods=['GET'])
-    @jwt_service.token_required
+    @JWTService.token_required  # Use JWTService directly
     def get_user(user_id):
         user_dto = user_service.get_user(user_id)
         if user_dto:
@@ -61,7 +54,7 @@ def setup_routes(app, user_service, jwt_service):
             return jsonify({'error': 'User not found'}), 404
 
     @app.route('/users/<user_id>', methods=['PUT'])
-    @jwt_service.token_required
+    @JWTService.token_required  # Use JWTService directly
     def update_user(user_id):
         data = request.get_json()
         updated_user_dto = user_service.update_user(user_id, data)
@@ -71,11 +64,9 @@ def setup_routes(app, user_service, jwt_service):
             return jsonify({'error': 'Failed to update user'}), 404
 
     @app.route('/users/<user_id>', methods=['DELETE'])
-    @jwt_service.token_required
+    @JWTService.token_required  # Use JWTService directly
     def delete_user(user_id):
         if user_service.delete_user(user_id):
             return jsonify({'message': 'User successfully deleted'}), 200
         else:
             return jsonify({'error': 'Failed to delete user'}), 404
-
-    # Add more routes as needed

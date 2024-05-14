@@ -1,6 +1,6 @@
 #dto_converter.py
-from dto import InvoiceDTO
-from models import Invoice
+from invoice_microservices.app_invoice.dto import InvoiceDTO
+from invoice_microservices.app_invoice.models import Invoice
 
 class InvoiceConverter:
     @staticmethod

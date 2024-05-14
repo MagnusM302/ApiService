@@ -9,41 +9,39 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(current_dir)
 sys.path.append(parent_dir)
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from report_microservices.app_report.controllers import setup_routes
+from report_microservices.app_report.services import ReportService
 
-from app_report.services import ReportService
-from app_report.dal import ReportRepository
-from app_report.controllers import setup_routes
+
+# Custom module imports from shared
+from shared.custom_logging import setup_logging
+from shared.custom_dotenv import load_env_variables
+
+# Load environment variables using the custom function from shared
+load_env_variables()
 
 def create_report_app():
     app = Flask(__name__)
-    CORS(app)  # Aktivér CORS for alle ruter
+    CORS(app)  # Enable Cross-Origin Resource Sharing if needed
 
-    # Opret tjeneste med dens afhængigheder
-    report_service = ReportService(ReportRepository())
+    # Initialize the report service
+    report_service = ReportService()
 
-    # Definer ruter via controller
+    # Setup routes with the initialized service
     setup_routes(app, report_service)
 
     return app
 
 def run_http():
     app = create_report_app()
-    app.run(port=5002)
-
-def run_https():
-    app = create_report_app()
-    app.run(ssl_context=('cert.pem', 'key.pem'), port=5003)
-
-def run_servers():
-    # Opsætning af HTTP og HTTPS servere ved hjælp af multiprocessing
-    http_process = Process(target=run_http)
-    https_process = Process(target=run_https)
-    
-    http_process.start()
-    https_process.start()
-
-    http_process.join()  # Vent eventuelt på, at HTTP-serverprocessen afsluttes
-    https_process.join()  # Vent eventuelt på, at HTTPS-serverprocessen afsluttes
+    app.run(host='0.0.0.0', port=5003, debug=True, use_reloader=False)
 
 if __name__ == '__main__':
-    run_servers()
+    # Ensure the logging is set up only in the main process
+    setup_logging()
+
+    # Start the HTTP server process
+    http_process = Process(target=run_http)
+    http_process.start()
+    http_process.join()

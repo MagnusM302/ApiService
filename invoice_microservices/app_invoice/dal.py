@@ -1,7 +1,7 @@
 #invoice_dal.py
 from shared.database import Database
 from bson.objectid import ObjectId
-from models import Invoice
+from invoice_microservices.app_invoice.models import Invoice
 
 class InvoiceRepository:
     collection = Database.get_collection('invoices')

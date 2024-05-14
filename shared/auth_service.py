@@ -5,21 +5,23 @@ from user_microservices.app_user.models import UserRole
 from functools import wraps
 from .config import ALLOWED_SERVICE_IDS
 
-class JWTService:
-    def __init__(self, secret_key, algorithm='HS256'):
-        self.secret_key = secret_key
-        self.algorithm = algorithm
 
-    def generate_token(self, user_id, role, expires_in=24):
+class JWTService:
+    secret_key = "your_secret_key_here"  # Statisk hemmelig nøgle for demonstration
+    algorithm = 'HS256'
+
+    @staticmethod
+    def generate_token(user_id, role, expires_in=24):
         payload = {
             "sub": str(user_id),
             "role": role,
             "iat": datetime.now(timezone.utc),
             "exp": datetime.now(timezone.utc) + timedelta(hours=expires_in)
         }
-        return jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
+        return jwt.encode(payload, JWTService.secret_key, algorithm=JWTService.algorithm)
     
-    def generate_system_token(self, service_id):
+    @staticmethod
+    def generate_system_token(service_id):
         if service_id not in ALLOWED_SERVICE_IDS:
             raise ValueError("Unauthorized service request")
         payload = {
@@ -27,40 +29,10 @@ class JWTService:
             "iat": datetime.now(timezone.utc),
             "exp": datetime.now(timezone.utc) + timedelta(hours=24)
         }
-        return jwt.encode(payload, self.secret_key, algorithm='HS256')
+        return jwt.encode(payload, JWTService.secret_key, algorithm='HS256')
 
-    def system_token_required(self, f):
-        @wraps(f)
-        def decorated_function(*args, **kwargs):
-            system_token = request.headers.get('System-Authorization')
-            if not system_token:
-                return jsonify({'message': 'Missing system authorization token'}), 401
-
-            try:
-                decoded_token = jwt.decode(system_token, self.secret_key, algorithms=[self.algorithm])
-                # Yderligere validering kan tilføjes her
-            except jwt.ExpiredSignatureError:
-                return jsonify({'message': 'System token expired'}), 401
-            except jwt.InvalidTokenError:
-                return jsonify({'message': 'Invalid system token'}), 401
-
-            return f(*args, **kwargs)
-        return decorated_function
-    
-    def decode_token(self, token):
-        try:
-            return jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
-        except jwt.ExpiredSignatureError:
-            raise ValueError("Token expired")
-        except jwt.InvalidTokenError:
-            raise ValueError("Invalid token")
-
-    def refresh_token(self, token):
-        payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm], options={"verify_exp": False})
-        payload['exp'] = datetime.now(timezone.utc) + timedelta(hours=24)
-        return jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
-
-    def token_required(self, f):
+    @staticmethod
+    def token_required(f):
         @wraps(f)
         def decorated(*args, **kwargs):
             token = request.headers.get('Authorization')
@@ -68,14 +40,18 @@ class JWTService:
                 return jsonify({'message': 'A valid token is missing'}), 403
 
             try:
-                current_user = self.decode_token(token)
-            except ValueError as e:
-                return jsonify({'message': 'Token is invalid or expired', 'error': str(e)}), 403
+                decoded_token = jwt.decode(token, JWTService.secret_key, algorithms=[JWTService.algorithm])
+                # Tilføj yderligere validering efter behov
+            except jwt.ExpiredSignatureError:
+                return jsonify({'message': 'Token expired'}), 401
+            except jwt.InvalidTokenError:
+                return jsonify({'message': 'Invalid token'}), 401
 
-            return f(current_user, *args, **kwargs)
+            return f(*args, **kwargs)
         return decorated
 
-    def role_required(self, allowed_roles):
+    @staticmethod
+    def role_required(allowed_roles):
         def decorator(f):
             @wraps(f)
             def decorated_function(*args, **kwargs):
@@ -84,8 +60,8 @@ class JWTService:
                     return jsonify({'message': 'A valid token is missing'}), 403
 
                 try:
-                    current_user = self.decode_token(token)
-                    user_role = UserRole(current_user['role'])  # Antager at 'role' er gemt som en Enum værdi
+                    decoded_token = jwt.decode(token, JWTService.secret_key, algorithms=[JWTService.algorithm])
+                    user_role = decoded_token['role']
                 except Exception as e:
                     return jsonify({'message': 'Token is invalid or expired', 'error': str(e)}), 403
 

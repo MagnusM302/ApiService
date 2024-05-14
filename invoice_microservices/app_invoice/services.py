@@ -1,13 +1,13 @@
 from datetime import datetime
-from converters import InvoiceConverter
-from dto import InvoiceDTO
-from dal import InvoiceRepository
+from invoice_microservices.app_invoice.converters import InvoiceConverter
+from invoice_microservices.app_invoice.dto import InvoiceDTO
+from invoice_microservices.app_invoice.dal import InvoiceRepository
 from shared.exceptions import ResourceNotFound
 
 class InvoiceService:
-    def __init__(self, invoice_repository, invoice_converter):
-        self.invoice_repository = invoice_repository
-        self.invoice_converter = invoice_converter
+    def __init__(self):
+        self.invoice_repository = InvoiceRepository
+       
 
     def calculate_price(self, square_meters):
         """Calculate the price based on the property's square meters."""

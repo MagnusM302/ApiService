@@ -1,54 +1,47 @@
-import sys
 import os
+import sys
 from flask import Flask
 from flask_cors import CORS
 from multiprocessing import Process
-from app_invoice.controllers import setup_routes
 
-# Ensure shared utilities and services are accessible
+# Set up the system path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
-sys.path.append(current_dir)  # Assuming related logic is in the same directory
-sys.path.append(parent_dir)
+sys.path.append(current_dir)  # Adding the current directory to the system path
+sys.path.append(parent_dir)    # Adding the parent directory to the system path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from app_invoice.services import InvoiceService
-from app_invoice.dal import InvoiceRepository
-from app_invoice.converters import InvoiceConverter
+# Ensure shared utilities and services are accessible
+from invoice_microservices.app_invoice.controllers import setup_routes
+from invoice_microservices.app_invoice.services import InvoiceService
+from shared.custom_logging import setup_logging
+from shared.custom_dotenv import load_env_variables
+
+# Load environment variables using the custom function from shared
+load_env_variables()
 
 def create_invoice_app():
+    """Create and configure an instance of the Flask application."""
     app = Flask(__name__)
-    CORS(app)
+    CORS(app)  # Configure CORS as needed.
 
-    # Correctly create instances of dependencies
-    invoice_repository = InvoiceRepository()
-    invoice_converter = InvoiceConverter()
+    # Initialize services
+    invoice_service = InvoiceService()
 
-    # Correct initialization of InvoiceService
-    invoice_service = InvoiceService(invoice_repository, invoice_converter)
-
-    # Define all your Flask routes
+    # Setup routes with the initialized service
     setup_routes(app, invoice_service)
-    
+
     return app
 
 def run_http():
     app = create_invoice_app()
-    app.run(port=5004)
-
-def run_https():
-    app = create_invoice_app()
-    app.run(ssl_context=('cert.pem', 'key.pem'), port=5005)
-
-def run_servers():
-    # Setup HTTP and HTTPS servers using multiprocessing
-    http_process = Process(target=run_http)
-    https_process = Process(target=run_https)
-    
-    http_process.start()
-    https_process.start()
-
-    http_process.join()  # Optionally wait for the HTTP server process to finish
-    https_process.join()  # Optionally wait for the HTTPS server process to finish
+    app.run(host='0.0.0.0', port=5002, debug=True, use_reloader=False)
 
 if __name__ == '__main__':
-    run_servers()
+    # Ensure the logging is set up only in the main process
+    setup_logging()
+
+    # Start the HTTP server process
+    http_process = Process(target=run_http)
+    http_process.start()
+    http_process.join()

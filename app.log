@@ -80,3 +80,29 @@ TypeError: UserService.login_user() missing 1 required positional argument: 'pas
 2024-05-11 22:00:56,884 - INFO - [33mPress CTRL+C to quit[0m
 2024-05-11 22:01:36,118 - INFO - 127.0.0.1 - - [11/May/2024 22:01:36] "OPTIONS /login HTTP/1.1" 200 -
 2024-05-11 22:01:36,667 - INFO - 127.0.0.1 - - [11/May/2024 22:01:36] "POST /login HTTP/1.1" 200 -
+2024-05-13 09:15:43,623 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-13 09:15:43,624 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-13 09:16:10,471 - INFO - 127.0.0.1 - - [13/May/2024 09:16:10] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-13 09:16:41,338 - INFO - 127.0.0.1 - - [13/May/2024 09:16:41] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2024-05-13 09:17:37,357 - INFO - 127.0.0.1 - - [13/May/2024 09:17:37] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-13 09:18:08,079 - INFO - 127.0.0.1 - - [13/May/2024 09:18:08] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2024-05-13 09:20:46,737 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-13 09:20:46,738 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-13 09:21:35,114 - INFO - 127.0.0.1 - - [13/May/2024 09:21:35] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-13 09:22:05,506 - INFO - 127.0.0.1 - - [13/May/2024 09:22:05] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2024-05-13 09:58:11,505 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-13 09:58:11,506 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-13 10:00:26,252 - INFO - 127.0.0.1 - - [13/May/2024 10:00:26] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-13 10:00:26,921 - INFO - 127.0.0.1 - - [13/May/2024 10:00:26] "POST /login HTTP/1.1" 200 -
+2024-05-13 10:01:19,446 - INFO - 127.0.0.1 - - [13/May/2024 10:01:19] "OPTIONS /register HTTP/1.1" 200 -
+2024-05-13 10:01:19,777 - INFO - 127.0.0.1 - - [13/May/2024 10:01:19] "[35m[1mPOST /register HTTP/1.1[0m" 500 -
+2024-05-13 10:03:36,687 - INFO - 127.0.0.1 - - [13/May/2024 10:03:36] "OPTIONS /register HTTP/1.1" 200 -
+2024-05-13 10:03:37,328 - INFO - 127.0.0.1 - - [13/May/2024 10:03:37] "[35m[1mPOST /register HTTP/1.1[0m" 201 -
+2024-05-13 10:04:05,038 - INFO - 127.0.0.1 - - [13/May/2024 10:04:05] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-13 10:04:05,648 - INFO - 127.0.0.1 - - [13/May/2024 10:04:05] "POST /login HTTP/1.1" 200 -
+2024-05-13 22:49:31,923 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5003
+2024-05-13 22:49:31,931 - INFO - [33mPress CTRL+C to quit[0m

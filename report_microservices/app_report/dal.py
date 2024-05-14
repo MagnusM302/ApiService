@@ -1,5 +1,5 @@
 from shared.database import Database
-from models import Report
+from report_microservices.app_report.models import Report
 from bson.objectid import ObjectId
 
 class ReportRepository:

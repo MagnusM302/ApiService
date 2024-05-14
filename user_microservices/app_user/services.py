@@ -1,15 +1,15 @@
 import re
 import bcrypt
-from .dal import UserRepository
-from .models import User, UserRole
-from .converters import UserConverter
-from .dto import UserDTO
+from user_microservices.app_user.dal import UserRepository
+from user_microservices.app_user.models import User, UserRole
+from user_microservices.app_user.converters import UserConverter
+from user_microservices.app_user.dto import UserDTO
 from shared.auth_service import JWTService
 
 class UserService:
     def __init__(self):
         self.user_repository = UserRepository()
-        self.jwt_service = JWTService('your_secret_key_here')
+        self.jwt_service = JWTService()  
 
     def register_user(self, name, address, post_number, phone, username, email, password, role):
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):

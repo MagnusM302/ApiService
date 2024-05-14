@@ -1,5 +1,5 @@
-from models import Report
-from dto import ReportDTO
+from report_microservices.app_report.models import Report
+from report_microservices.app_report.dto import ReportDTO
 
 class ReportConverter:
     @staticmethod
