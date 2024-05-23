@@ -3,14 +3,21 @@
 {% block content %}
 
     <h1>Træk data fra OIS</h1>
-    Go to users <a href='/users'>here</a><br>
 
     <form method="POST" action="/">
         <fieldset>
         <legend>Søg på en adresse</legend>
-        <input type="text" name="address" placeholder="Adresse">
-        <input type="submit" value="Hit me!">
+        <div class='autocomplete-container'>
+            <input type="text" id="adresse" name="address" placeholder="Adresse">
+        </div>
+        <input type="submit" value="Hit me!" style="margin-top:10px;"">
         </fieldset>    
     </form>
+    <br><br>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
+    <script src="/node_modules/dawa-autocomplete2/dist/js/dawa-autocomplete2.min.js"></script>
+    <script src=/js/script.js></script>
 
 {% endblock %}

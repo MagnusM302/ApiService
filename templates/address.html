@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Adresser</h1>
+<p>Du søgte på: <b>{{ address }}</b> </p>
+
+<h3>Resultater</h3>
+
+{% if address_details %}
+    <ul>
+        {% for result in address_details['resultater'] %}
+            {% set adresse = result['adresse'] %}
+            <li>Adresse: {{ adresse['vejnavn'] }} {{ adresse['husnr'] }}, {{ adresse['postnr'] }} {{ adresse['postnrnavn'] }}</li>
+            <li><a href="address_details.html?id={{ adresse['id'] }}">Se detaljer</a></li>
+            <hr>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No address details available.</p>
+{% endif %}
+
+<p><a href="/">Tilbage</a></p>
+
+{% endblock %}

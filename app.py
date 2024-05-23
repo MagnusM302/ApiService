@@ -1,15 +1,19 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, abort
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from bson.json_util import dumps, loads
 import requests
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='/')
 
 client = MongoClient("localhost", 27017)
 db = client.mydatabase
 people = db.people
 
+username = 'XJCGPDGQSM'
+password = '$Skole1234'
+
+# Controller / models
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'GET':
@@ -31,19 +35,22 @@ def get_users():
     return render_template('people.html', people_list=people_data)
 
 
+#Business logic
+
+
+#Infrastructure / Providers
 def get_address(address):
-    response = requests.get('https://api.dataforsyningen.dk/navngivneveje', params={'q': address})
+    response = requests.get('https://api.dataforsyningen.dk/datavask/adresser', params={'betegnelse': address})
 
     if response.status_code == 200:
         address_details = response.json()
-        return address_details
+        print(address_details)
+        return render_template('address.html', address_details=address_details, address=address)
     else:
-        return None
+        abort(400)
 
 
-#headasd
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
-
 
