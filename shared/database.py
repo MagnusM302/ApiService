@@ -1,8 +1,8 @@
 from pymongo import MongoClient
 
 class Database:
-    client = MongoClient('mongodb://localhost:27017/')
-    db = client['property_reports_db']
+    client = MongoClient('mongodb+srv://buildingDBuser:$Skole1234@cluster0.dezwb5i.mongodb.net//')
+    db = client['BuildingReportsDB']
 
     @staticmethod
     def get_collection(name):
