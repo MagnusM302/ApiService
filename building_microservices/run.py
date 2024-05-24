@@ -20,7 +20,9 @@ def create_app():
 
 def run_http():
     app = create_app()
-    app.run(host='0.0.0.0', port=5005, debug=True)
+    # Disable debug mode if running in multiprocessing context
+    debug_mode = 'debug' in sys.argv
+    app.run(host='0.0.0.0', port=5005, debug=debug_mode)
 
 if __name__ == '__main__':
     run_http()
