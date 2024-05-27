@@ -13,7 +13,7 @@ people = db.people
 username = 'XJCGPDGQSM'
 password = '$Skole1234'
 
-# Controller / models
+# Controller / modelsaa
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'GET':
