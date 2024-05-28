@@ -2,8 +2,27 @@
 
 {% block content %}
 
-<h1>Adresse detaljer - {{ address }} </h1>
+{% if address_details %}
+  {% for address_detail in address_details %}
+    <h1>Adresse detaljer - {{ address_detail.id_lokalId }} </h1>
 
-
+    <p><strong>Adressebetegnelse:</strong> {{ address_detail.adressebetegnelse }}</p>
+    {% if address_detail.husnummer %}
+      <p><strong>Husnummer:</strong> {{ address_detail.husnummer.husnummertekst }}</p>
+    {% endif %}
+    {% if address_detail.postnummer %}
+      <p><strong>Postnummer:</strong> {{ address_detail.postnummer.postnr }}</p>
+    {% endif %}
+    {% if address_detail.husnummer.kommuneinddeling %}
+      <p><strong>Kommune:</strong> {{ address_detail.husnummer.kommuneinddeling.navn }}</p>
+    {% endif %}
+    {% if address_detail.husnummer.navngivenVej %}
+      <p><strong>Vejnavn:</strong> {{ address_detail.husnummer.navngivenVej.vejnavn }}</p>
+    {% endif %}
+    <!-- Add more details as needed -->
+  {% endfor %}
+{% else %}
+  <p>No address details found.</p>
+{% endif %}
 
 {% endblock %}

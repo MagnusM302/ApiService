@@ -2,17 +2,16 @@
 
 {% block content %}
 
-<h1>Adresser</h1>
-<p>Du søgte på: <b>{{ address }}</b> </p>
+<h1>Addresses</h1>
+<p>You searched for: <b>{{ searched_address }}</b> </p>
 
-<h3>Resultater</h3>
+<h3>Results</h3>
 
 {% if address_details %}
     <ul>
-        {% for result in address_details['resultater'] %}
-            {% set adresse = result['adresse'] %}
-            <li>Adresse: {{ adresse['vejnavn'] }} {{ adresse['husnr'] }}, {{ adresse['postnr'] }} {{ adresse['postnrnavn'] }}</li>
-            <li><a href="address_details.html?id={{ adresse['id'] }}">Se detaljer</a></li>
+        {% for address in address_details %}
+            <li>Address: {{ address.data.vejnavn }} {{ address.data.husnr }}, {{ address.data.postnr }} {{ address.data.postnrnavn }}</li>
+            <li><a href="/address_details/{{ address.data.id }}">See details</a></li>
             <hr>
         {% endfor %}
     </ul>
@@ -20,6 +19,6 @@
     <p>No address details available.</p>
 {% endif %}
 
-<p><a href="/">Tilbage</a></p>
+<p><a href="/">Back</a></p>
 
 {% endblock %}
