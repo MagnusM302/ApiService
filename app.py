@@ -12,6 +12,7 @@ people = db.people
 username = 'XJCGPDGQSM'
 password = '$Skole1234'
 
+#CONTROLLERS
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'GET':
@@ -28,6 +29,11 @@ def address_details(id):
         return render_template('address_details.html', address_details=address_details)
     except ValueError:
         return "Invalid address ID", 400
+
+
+
+#BUSINESSLOGIC
+
 
 
 #INFRASTRUCTURE
@@ -50,6 +56,18 @@ def get_address_details(address_id):
         return address_details
     else:
         abort(400)
+
+def get_housenumber_from_address(address_id):
+    return ""
+
+def get_buildingbfe_from_housenumber(housenumber):
+    return ""
+
+def get_groundbfe_from_buildingbfe(buildingbfe):
+    return ""
+
+def get_buildinginfo_from_groundid(groundbfe):
+    return ""
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
