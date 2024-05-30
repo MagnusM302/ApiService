@@ -31,9 +31,9 @@ def address_details(id):
         return "Invalid address ID", 400
 
 
-
 #BUSINESSLOGIC
-
+def get_building_information(address_id):
+    return ""
 
 
 #INFRASTRUCTURE
@@ -47,7 +47,6 @@ def get_address(address):
         abort(400)
 
 def get_address_details(address_id):
-    print('We got to here! ' + address_id) 
     response = requests.get(f'https://services.datafordeler.dk/DAR/DAR/3.0.0/rest/adresse?id={address_id}')
 
     if response.status_code == 200:
@@ -58,16 +57,46 @@ def get_address_details(address_id):
         abort(400)
 
 def get_housenumber_from_address(address_id):
-    return ""
+    response = requests.get(f'https://services.datafordeler.dk/DAR/DAR/3.0.0/rest/adresseTilHusnummer?username={username}&password={password}&Format=JSON&adresseId={address_id}')
+
+    if response.status_code == 200:
+        housenumber = response.json()
+        print(housenumber)
+        return housenumber
+    else:  
+        return "Something went wrong retrieving the house number", 400
+
 
 def get_buildingbfe_from_housenumber(housenumber):
-    return ""
+    response = requests.get(f'https://services.datafordeler.dk/DAR/DAR/3.0.0/rest/husnummerTilJordstykke?HusnummerId={housenumber}')
+    
+    if response.status_code == 200:
+        buildingbfe_details = response.json()
+        print(buildingbfe_details)
+        return buildingbfe_details
+    else:
+        return "Something went wrong retrieving the building details", 400
 
 def get_groundbfe_from_buildingbfe(buildingbfe):
-    return ""
+    response = requests.get(f'https://services.datafordeler.dk/BBR/BBRPublic/1/rest/grund?username={username}&password={password}&Format=JSON&BFENummer={buildingbfe}')
 
-def get_buildinginfo_from_groundid(groundbfe):
-    return ""
+    if response.status_code == 200:
+        ground_details = response.json()
+        print(ground_details)
+        return ground_details
+    else:
+        return "Something went wrong retrieving the ground details", 400
+
+def get_buildinginfo_from_groundid(groundid):
+    response = requests.get(f'https://services.datafordeler.dk/BBR/BBRPublic/1/rest/bygning?username={username}&password={password}&Format=JSON&Grund={groundid}')
+
+    if response.status_code == 200:
+        building_details = response.json()
+        print(building_details)
+        return building_details
+    else:
+        return "Something went wrong retrieving the building details", 400
+    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
