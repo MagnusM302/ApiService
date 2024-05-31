@@ -10,7 +10,7 @@ sys.path.append(current_dir)  # Adding the current directory to the system path
 sys.path.append(parent_dir)    # Adding the parent directory to the system path
 
 # Now we can safely import controller
-from building_microservices.app_user.controllers import controller
+from building_microservices.app_building.controllers import controller
 
 def create_app():
     app = Flask(__name__)
