@@ -39,13 +39,21 @@ class UserRepository:
         return None
 
     def get_user_by_username(self, username):
+        print(f"Attempting to find user by username: {username}")
         document = self.collection.find_one({"username": username})
         if document:
+            print(f"User found: {document}")
             document['user_id'] = str(document['_id'])
             document['role'] = UserRole(document['role'])
             del document['_id']  # Remove _id key
-            return User(**document)
+            user = User(**document)
+            print(f"User loaded: {user.username}, Role: {user.role.name}")
+            return user
+        else:
+            print("No user found with that username.")
         return None
+
+
 
     def update_user(self, user_id, update_data):
         if 'role' in update_data and isinstance(update_data['role'], UserRole):
