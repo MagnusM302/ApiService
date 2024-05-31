@@ -1,0 +1,109 @@
+2024-05-27 09:43:35,233 : DEBUG : UserService : UserService Setup Complete
+2024-05-27 09:56:55,698 : DEBUG : UserService : UserService Setup Complete
+2024-05-27 22:57:13,213 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 09:51:38,289 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 09:56:02,324 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 10:00:57,781 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 10:02:05,902 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 10:09:08,276 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 10:15:39,650 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 10:15:49,552 : ERROR : UserService : Exception on /register [POST]
+Traceback (most recent call last):
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask_cors\extension.py", line 178, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask_cors\extension.py", line 178, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bruger\source\repos\ApiService\shared\auth_service.py", line 64, in decorated
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bruger\source\repos\ApiService\shared\auth_service.py", line 99, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bruger\source\repos\ApiService\user_microservices\app_user\controllers.py", line 28, in register
+    user_dto = user_service.register_user(**data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bruger\source\repos\ApiService\user_microservices\app_user\services.py", line 37, in register_user
+    user_dto = UserConverter.to_dto(user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bruger\source\repos\ApiService\user_microservices\app_user\converters.py", line 14, in to_dto
+    user_id=str(user._id),
+                ^^^^^^^^
+AttributeError: 'User' object has no attribute '_id'
+2024-05-28 10:40:53,324 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 10:41:00,605 : ERROR : UserService : Exception on /login [POST]
+Traceback (most recent call last):
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask_cors\extension.py", line 178, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask_cors\extension.py", line 178, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bruger\source\repos\ApiService\user_microservices\app_user\controllers.py", line 44, in login
+    user_data = user_service.login_user(username, password)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bruger\source\repos\ApiService\user_microservices\app_user\services.py", line 54, in login_user
+    user = self.user_repository.get_user_by_username(username)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bruger\source\repos\ApiService\user_microservices\app_user\dal.py", line 44, in get_user_by_username
+    return User(**document)
+           ^^^^^^^^^^^^^^^^
+TypeError: User.__init__() got an unexpected keyword argument '_id'
+2024-05-28 10:44:56,125 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 21:05:25,503 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 21:51:18,343 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 21:51:23,370 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 21:51:23,370 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 22:06:43,494 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 22:16:59,560 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 22:27:17,624 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 22:41:30,821 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 22:43:46,999 : DEBUG : UserService : UserService Setup Complete
+2024-05-28 23:16:40,119 : DEBUG : UserService : UserService Setup Complete
+2024-05-29 07:56:49,211 : DEBUG : UserService : UserService Setup Complete
+2024-05-29 08:33:58,347 : DEBUG : UserService : UserService Setup Complete
+2024-05-29 08:48:28,155 : DEBUG : UserService : UserService Setup Complete
+2024-05-29 09:11:28,907 : DEBUG : UserService : UserService Setup Complete
+2024-05-29 09:18:24,539 : DEBUG : UserService : UserService Setup Complete
+2024-05-29 09:26:47,292 : DEBUG : UserService : UserService Setup Complete
+2024-05-29 10:09:38,410 : DEBUG : UserService : UserService Setup Complete
+2024-05-29 10:38:46,293 : DEBUG : UserService : UserService Setup Complete
+2024-05-29 10:47:13,204 : DEBUG : UserService : UserService Setup Complete
+2024-05-29 10:49:28,147 : DEBUG : UserService : UserService Setup Complete
+2024-05-29 21:45:22,358 : DEBUG : UserService : UserService Setup Complete
+2024-05-29 21:54:12,707 : DEBUG : UserService : UserService Setup Complete
+2024-05-30 07:59:23,091 : DEBUG : UserService : UserService Setup Complete
+2024-05-30 08:36:37,947 : DEBUG : UserService : UserService Setup Complete
+2024-05-30 09:02:57,378 : DEBUG : UserService : UserService Setup Complete
+2024-05-30 09:08:13,081 : DEBUG : UserService : UserService Setup Complete
+2024-05-30 09:15:42,882 : DEBUG : UserService : UserService Setup Complete
+2024-05-30 09:27:56,734 : DEBUG : UserService : UserService Setup Complete
+2024-05-30 09:38:39,344 : DEBUG : UserService : UserService Setup Complete
+2024-05-30 10:21:22,967 : DEBUG : UserService : UserService Setup Complete
+2024-05-30 10:33:30,204 : DEBUG : UserService : UserService Setup Complete
+2024-05-31 07:59:33,309 : DEBUG : UserService : UserService Setup Complete
