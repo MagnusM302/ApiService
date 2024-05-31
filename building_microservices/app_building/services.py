@@ -6,23 +6,7 @@ class BuildingService:
     @staticmethod
     def get_address(address: str) -> AddressDTO:
         address_data = BuildingRepository.fetch_address(address)
-        print(f"Address data received: {address_data}")  # Debug print
-        
-        if not address_data or 'data' not in address_data[0]:
-            print("No address data found or invalid structure")
-            raise ValueError("No address data found or invalid structure")
-        
-        address_dto = AddressProcessor.process_address_data(address_data[0]['data'])
-        return address_dto
-    
-    @staticmethod
-    def get_address_details(address_id: str):
-        return BuildingRepository.fetch_address_details(address_id)
-
-    @staticmethod
-    def get_building_details(building_id: str) -> BuildingDetailsDTO:
-        building_details = BuildingRepository.fetch_building_details(building_id)
-        return DTOConverters.to_building_details_dto(building_details)
+        return DTOConverters.to_address_dto(address_data[0]['data'])
 
     @staticmethod
     def get_full_details(address: str) -> HouseDetailsDTO:
