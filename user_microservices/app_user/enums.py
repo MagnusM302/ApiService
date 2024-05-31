@@ -2,5 +2,5 @@
 from enum import Enum
 
 class UserRole(Enum):
-    INSPECTOR = 1
-    CUSTOMER = 2
+    Inspector = 1
+    Customer = 2

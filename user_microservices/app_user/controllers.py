@@ -1,32 +1,36 @@
-# user_microservices.app_user.controllers.py
-from flask import request, jsonify
-from shared.auth_service import JWTService  # No changes here, just import
+from flask import request, jsonify, make_response
+from flask_cors import CORS  # Import CORS
+from shared.auth_service import JWTService
 from shared.json_utils import JsonUtils
 from shared.config import ALLOWED_SERVICE_IDS
 from user_microservices.app_user.services import UserService
+from shared.routes import add_common_routes  # Import the common routes
 
 def setup_routes(app, user_service):
-    user_service = UserService()  # Assuming UserService doesn't need parameters for initialization
+    print("Setting up routes...")
     
-    @app.route('/system-token', methods=['POST'])
-    def generate_system_token():
-        service_id = request.json.get('service_id')
-        if service_id in ALLOWED_SERVICE_IDS:
-            token = JWTService.generate_system_token(service_id)  # Use JWTService directly
-            return jsonify({'system_token': token}), 200
-        return jsonify({'error': 'Unauthorized service'}), 403
+    user_service = UserService()  # Assuming UserService doesn't need parameters for initialization
 
-    @app.route('/protected-route')
-    @JWTService.token_required  # Use JWTService directly
-    def protected_route():
-        return "This is a protected area!"
+    @app.after_request
+    def apply_cors(response):
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type'
+        return response
 
     @app.route('/register', methods=['POST'])
+    @JWTService.token_required  # Use JWTService directly
+    @JWTService.role_required(['Inspector'])
     def register():
         data = request.get_json()
-        user_dto = user_service.register_user(**data)
-        token = JWTService.generate_token(user_dto.user_id, user_dto.role)  # Use JWTService directly
-        return jsonify({'user_id': user_dto.user_id, 'token': token}), 201
+        try:
+            user_dto = user_service.register_user(**data)
+            token = JWTService.generate_token(user_dto.user_id, user_dto.role)  # Use JWTService directly
+            response = jsonify({'user_id': user_dto.user_id, 'token': token})
+            return response, 201
+        except ValueError as e:
+            response = jsonify({'error': str(e)})
+            return response, 400
 
     @app.route('/login', methods=['POST'])
     def login():
@@ -34,39 +38,58 @@ def setup_routes(app, user_service):
         username = data.get('username')
         password = data.get('password')
         if username is None or password is None:
-            return jsonify({'error': 'Username and password are required'}), 400
+            response = jsonify({'error': 'Username and password are required'})
+            return response, 400
         try:
-            user_dto = user_service.login_user(username, password)
-            token = JWTService.generate_token(user_dto['user_id'], user_dto['role'])  # Use JWTService directly
-            return jsonify({'token': token, 'user_id': user_dto['user_id']})
+            user_data = user_service.login_user(username, password)
+            token = user_data['token']
+            response = jsonify({'token': token, 'user_id': user_data['user_id'], 'role': user_data['role']})
+            return response
         except ValueError as e:
-            return jsonify({'error': str(e)}), 401
-        except KeyError as e:
-            return jsonify({'error': 'Missing key in user data: {}'.format(e)}), 500
+            response = jsonify({'error': str(e)})
+            return response, 401
 
     @app.route('/users/<user_id>', methods=['GET'])
-    @JWTService.token_required  # Use JWTService directly
+    @JWTService.token_required
     def get_user(user_id):
         user_dto = user_service.get_user(user_id)
         if user_dto:
-            return jsonify(JsonUtils.convert_to_json_serializable(user_dto)), 200
+            response = jsonify(JsonUtils.convert_to_json_serializable(user_dto))
+            return response
         else:
-            return jsonify({'error': 'User not found'}), 404
+            response = jsonify({'error': 'User not found'})
+            return response, 404
 
     @app.route('/users/<user_id>', methods=['PUT'])
-    @JWTService.token_required  # Use JWTService directly
+    @JWTService.token_required
     def update_user(user_id):
         data = request.get_json()
         updated_user_dto = user_service.update_user(user_id, data)
         if updated_user_dto:
-            return jsonify(JsonUtils.convert_to_json_serializable(updated_user_dto)), 200
+            response = jsonify(JsonUtils.convert_to_json_serializable(updated_user_dto))
+            return response
         else:
-            return jsonify({'error': 'Failed to update user'}), 404
+            response = jsonify({'error': 'Failed to update user'})
+            return response, 404
 
     @app.route('/users/<user_id>', methods=['DELETE'])
-    @JWTService.token_required  # Use JWTService directly
+    @JWTService.token_required
     def delete_user(user_id):
         if user_service.delete_user(user_id):
-            return jsonify({'message': 'User successfully deleted'}), 200
+            response = jsonify({'message': 'User successfully deleted'})
+            return response
         else:
-            return jsonify({'error': 'Failed to delete user'}), 404
+            response = jsonify({'error': 'Failed to delete user'})
+            return response, 404
+
+    # Add common routes for system token generation and protected routes
+    add_common_routes(app)
+    
+    # Add preflight route for CORS
+    @app.route('/<path:path>', methods=['OPTIONS'])
+    def preflight_handler(path):
+        response = make_response()
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type'
+        return response

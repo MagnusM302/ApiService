@@ -1,3 +1,5 @@
+# user_microservices/app_user/services.py
+
 import re
 import bcrypt
 from user_microservices.app_user.dal import UserRepository
@@ -24,14 +26,21 @@ class UserService:
             raise ValueError("Password must be at least 8 characters long")
 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-        user = self.user_repository.create_user(name=name, address=address, post_number=post_number, phone=phone,
-                                                username=username, email=email, hashed_password=hashed_password, role=role_enum)
-        user_data = UserConverter.to_dto(user)
-        user_data.user_id = str(user.user_id)  # Ensure user_id is converted to string in DTO
-        return user_data
+        user = self.user_repository.create_user(
+            name=name, 
+            address=address, 
+            post_number=post_number, 
+            phone=phone,
+            username=username, 
+            email=email, 
+            hashed_password=hashed_password, 
+            role=role_enum
+        )
+        user_dto = UserConverter.to_dto(user)
+        return user_dto
 
     def get_user(self, user_id):
-        user = self.user_repository.get_user(user_id)
+        user = self.user_repository.get_user_by_id(user_id)
         return UserConverter.to_dto(user) if user else None
 
     def update_user(self, user_id, update_data):
@@ -44,10 +53,8 @@ class UserService:
     def login_user(self, username, password):
         user = self.user_repository.get_user_by_username(username)
         if user and bcrypt.checkpw(password.encode('utf-8'), user.password_hash):
-        # Check if role is an enum before accessing .name
             role_str = user.role.name if isinstance(user.role, UserRole) else UserRole(user.role).name
             token = self.jwt_service.generate_token(user.user_id, role_str)
             return {"token": token, "user_id": str(user.user_id), "role": role_str}
         else:
             raise ValueError("Invalid username or password")
-

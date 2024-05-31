@@ -1,9 +1,10 @@
-# models.py
+# user_microservices/app_user/models.py
+
 from user_microservices.app_user.enums import UserRole
 
 class User:
-    def __init__(self, _id=None, name=None, address=None, post_number=None, phone=None, username=None, email=None, password_hash=None, role=None):
-        self.user_id = _id
+    def __init__(self, user_id=None, name=None, address=None, post_number=None, phone=None, username=None, email=None, password_hash=None, role=None):
+        self.user_id = user_id  # Use user_id instead of _id
         self.name = name
         self.address = address
         self.post_number = post_number

@@ -1,14 +1,18 @@
 import os
 import json
+import logging
+from logging.handlers import RotatingFileHandler
 import logging.config
 
-def setup_logging():
-    # Define the path to the logging configuration file
-    config_path = os.path.join(os.path.dirname(__file__), 'logging_config.json')
+def setup_logging(default_path='logging_config.json', default_level=logging.INFO, env_key='LOG_CFG'):
+    """Setup logging configuration"""
+    path = os.getenv(env_key, default_path)
+    if os.path.exists(path):
+        with open(path, 'rt') as f:
+            config = json.load(f)
+        logging.config.dictConfig(config)
+    else:
+        print("Failed to load configuration file: using default configs")
+        logging.basicConfig(level=default_level)
 
-    # Load the logging configuration from the JSON file
-    with open(config_path, 'rt') as f:
-        config = json.load(f)
-
-    # Use dictConfig to apply the logging configuration
-    logging.config.dictConfig(config)
+setup_logging()
