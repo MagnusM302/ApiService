@@ -1,37 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
+  {% if address_details %}
+    {% for address_detail in address_details %}
+      <h2>Adresse detaljer</h2>
+      <p><strong>Adressebetegnelse:</strong> {{ address_detail.adressebetegnelse }} - LOKAL-ID: {{ address_detail.id_lokalId }}</p>
+      <br>
+      <h3>Adgangsadresse:</h3>
+      {% if address_detail.husnummer %}
+        <p><strong>Vejnavn/husnummer:</strong> {{ address_detail.husnummer.navngivenVej.vejnavn }} {{ address_detail.husnummer.husnummertekst }}</p>
+      {% endif %}
+      {% if address_detail.husnummer.postnummer %}
+        <p><strong>Postnummer/by:</strong> {{ address_detail.husnummer.postnummer.postnr }} {{ address_detail.husnummer.postnummer.navn }}</p>
+      {% endif %}
+      {% if address_detail.husnummer.kommuneinddeling %}
+        <p><strong>Kommune:</strong> {{ address_detail.husnummer.kommuneinddeling.navn }} Kommune</p>
+        <p><strong>Kommunekode:</strong> {{ address_detail.husnummer.kommuneinddeling.kommunekode}}</p>
+      {% endif %}
+      {% if address_detail.husnummer.kommuneinddeling %}
+        <p><strong>Vejnavn:</strong> {{ address_detail.husnummer.navngivenVej.vejnavn }}</p>
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    <p>No address details found.</p>
+  {% endif %}
 
-{% if address_details %}
-
-  {% for address_detail in address_details %}
-    <h2>Adresse detaljer</h2>
-
-    <p><strong>Adressebetegnelse:</strong> {{ address_detail.adressebetegnelse }} - LOKAL-ID: {{ address_detail.id_lokalId }}</p>
-
-    <br>
-    <h3>Adgangsadresse:</h3>
-
-    {% if address_detail.husnummer %}
-      <p><strong>Vejnavn/husnummer:</strong> {{ address_detail.husnummer.navngivenVej.vejnavn }} {{ address_detail.husnummer.husnummertekst }}</p>
-    {% endif %}
-
-    {% if address_detail.husnummer.postnummer %}
-      <p><strong>Postnummer/by:</strong> {{ address_detail.husnummer.postnummer.postnr }} {{ address_detail.husnummer.postnummer.navn }}</p>
-    {% endif %}
-
-    {% if address_detail.husnummer.kommuneinddeling %}
-      <p><strong>Kommune:</strong> {{ address_detail.husnummer.kommuneinddeling.navn }} Kommune</p>
-      <p><strong>Kommunekode:</strong> {{ address_detail.husnummer.kommuneinddeling.kommunekode}} </p>
-    {% endif %}
-    
-    {% if address_detail.husnummer.kommuneinddeling %}
-      <p><strong>Vejnavn:</strong> {{ address_detail.husnummer.navngivenVej.vejnavn }}</p>
-    {% endif %}
-
-  {% endfor %}
-{% else %}
-  <p>No address details found.</p>
-{% endif %}
-
+  <h3 style="margin-top:30px;">Bygningsinformationer:</h3>
+  {% if building_info %}
+    {% for building in building_info %}
+        {% if building.byg007Bygningsnummer == 1 %}
+        <p><strong>Bygningsnummer:</strong> {{ building.byg007Bygningsnummer }}</p>
+        <p><strong>Bygningsopførelse (BYG.026):</strong> {{ building.byg026Opførelsesår }}</p>
+        <p><strong>Bygningens Anvendelse (BYG.021):</strong> {{ building_enums.BygningensAnvendelse(building.byg021BygningensAnvendelse) }}</p>
+        <p><strong>Ydervæggens Materiale (BYG.032):</strong> {{ material_enums.YdervaeggensMateriale(building.byg032YdervæggensMateriale) }}</p>
+        <p><strong>Tagdækningsmateriale (BYG.033):</strong> {{ material_enums.TagdaekningsMateriale(building.byg033Tagdækningsmateriale) }}</p>
+        <p><strong>Bebygget Areal (BYG.041):</strong> {{ building.byg041BebyggetAreal }}</p>
+        <p><strong>Koordinat (BYG.404):</strong> {{ building.byg404Koordinat }}</p>
+        {% endif %}
+    {% endfor %}
+  {% else %}
+    <p>Ingen bygningsinformationer fundet.</p>
+  {% endif %}
 {% endblock %}
