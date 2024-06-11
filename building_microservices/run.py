@@ -2,27 +2,44 @@ import os
 import sys
 from flask import Flask
 from flask_cors import CORS
+from multiprocessing import Process
 
-# Set up the system path
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-sys.path.append(current_dir)  # Adding the current directory to the system path
-sys.path.append(parent_dir)    # Adding the parent directory to the system path
+def set_sys_path():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    sys.path.append(current_dir)
+    sys.path.append(parent_dir)
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-# Now we can safely import controller
-from building_microservices.app_user.controllers import controller
+set_sys_path()
 
-def create_app():
+# Import service-specific modules
+from building_microservices.app_building.controllers import create_blueprint
+from building_microservices.app_building.services.service import BuildingService
+from building_microservices.app_building.datalag.dal import BuildingRepository
+from shared.custom_logging import setup_logging
+from shared.custom_dotenv import load_env_variables
+
+# Load environment variables
+load_env_variables()
+
+def create_building_app():
     app = Flask(__name__)
-    CORS(app)
-    app.register_blueprint(controller)
+    CORS(app, resources={r"/*": {"origins": "*"}})
+    repository = BuildingRepository()
+    building_service = BuildingService(repository)
+    blueprint = create_blueprint(building_service)
+    app.register_blueprint(blueprint, url_prefix='/api/buildings')
+    app.config['PORT'] = 5005
     return app
 
-def run_http():
-    app = create_app()
-    # Disable debug mode if running in multiprocessing context
-    debug_mode = 'debug' in sys.argv
-    app.run(host='0.0.0.0', port=5005, debug=debug_mode)
+def run_http(app):
+    app.run(host='0.0.0.0', port=app.config['PORT'], debug=True, use_reloader=False)
 
-if __name__ == '__main__':
-    run_http()
+def run_building_http():
+    app = create_building_app()
+    run_http(app)
+
+if __name__ == "__main__":
+    setup_logging()
+    run_building_http()

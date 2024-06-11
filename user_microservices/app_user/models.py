@@ -15,7 +15,7 @@ class User:
         # Improved role handling
         if isinstance(role, str):
             try:
-                self.role = UserRole[role]
+                self.role = UserRole[role.upper()]  # Ensure case insensitivity
             except KeyError:
                 raise ValueError(f"Invalid role specified: {role}")
         elif isinstance(role, int):

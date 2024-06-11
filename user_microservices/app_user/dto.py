@@ -1,3 +1,4 @@
+# dto.py
 class UserDTO:
     def __init__(self, user_id=None, name=None, email=None, role=None):
         self.user_id = user_id
