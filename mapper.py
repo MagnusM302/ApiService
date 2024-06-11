@@ -1,16 +1,11 @@
 import os
 
-def show_directory_tree(path):
-    for root, dirs, files in os.walk(path):
-        level = root.replace(path, '').count(os.sep)
-        indent = ' ' * 4 * level
-        print(f'{indent}{os.path.basename(root)}/')
+# Path to your models directory
+models_dir = 'c:/Users/Bruger/source/repos/ApiService/report_microservices'
 
-        if files:
-            sub_indent = indent + ' ' * 4
-            for file in files:
-                print(f'{sub_indent}{file}')
-
-if __name__ == '__main__':
-    path = os.getcwd()  # Get current working directory
-    show_directory_tree(path)
+# Printing all files and directories in the specified directory
+for root, dirs, files in os.walk(models_dir):
+    for name in files:
+        print(os.path.join(root, name))
+    for name in dirs:
+        print(os.path.join(root, name))

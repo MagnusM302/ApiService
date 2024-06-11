@@ -1,100 +1,113 @@
-from building_microservices.app_building.models import Address, BuildingDetails, HouseDetails, CompleteHouseDetails, Hustype, OwnerDetails
-from building_microservices.app_building.dtos import AddressDTO, BuildingDetailsDTO, HouseDetailsDTO, CompleteHouseDetailsDTO
+from ..models.address import Address
+from .address_dto import AddressDTO
+from ..models.building_details import BuildingDetails
+from .building_details_dto import BuildingDetailsDTO
 
-class DTOConverters:
-    
-    
-    @staticmethod
-    def to_address_dto(address: Address) -> AddressDTO:
-        print(f"Converting to AddressDTO with data: {address}")
-        
-        # Fallback for tekst field if it is missing
-        if not address.tekst:
-            address.tekst = f"{address.vejnavn} {address.husnr}, {address.postnr} {address.postnrnavn}"
-        
-        return AddressDTO(
-            id=address.id,
-            vejkode=address.vejkode,
-            vejnavn=address.vejnavn,
-            husnr=address.husnr,
-            postnr=address.postnr,
-            postnrnavn=address.postnrnavn,
-            kommunekode=address.kommunekode,
-            adgangsadresseid=address.adgangsadresseid,
-            tekst=address.tekst
-        )
-    
-    @staticmethod
-    def from_dict(data: dict) -> Address:
-        # Ensure 'tekst' field is included if missing
-        if 'tekst' not in data:
-            data['tekst'] = f"{data.get('vejnavn', '')} {data.get('husnr', '')}, {data.get('postnr', '')} {data.get('postnrnavn', '')}"
-        
-        # Ensure 'stormodtagerpostnr' is a boolean
-        if 'stormodtagerpostnr' not in data or data['stormodtagerpostnr'] is None:
-            data['stormodtagerpostnr'] = False
+def address_to_dto(address: Address) -> AddressDTO:
+    return AddressDTO(
+        id=address.id,
+        vejkode=address.vejkode,
+        vejnavn=address.vejnavn,
+        adresseringsvejnavn=address.adresseringsvejnavn or "",
+        husnr=address.husnr,
+        postnr=address.postnr,
+        postnrnavn=address.postnrnavn,
+        kommunekode=address.kommunekode or "",
+        adgangsadresseid=address.adgangsadresseid,
+        tekst=address.tekst,
+        x=address.x if address.x is not None else 0.0,
+        y=address.y if address.y is not None else 0.0,
+        href=address.href or "",
+        status=address.status,
+        darstatus=address.darstatus if address.darstatus is not None else 0,
+        stormodtagerpostnr=address.stormodtagerpostnr,
+    )
 
-        return Address(**data)
+def dto_to_address(dto: AddressDTO) -> Address:
+    return Address(
+        id=dto.id,
+        vejkode=dto.vejkode,
+        vejnavn=dto.vejnavn,
+        adresseringsvejnavn=dto.adresseringsvejnavn,
+        husnr=dto.husnr,
+        postnr=dto.postnr,
+        postnrnavn=dto.postnrnavn,
+        kommunekode=dto.kommunekode,
+        adgangsadresseid=dto.adgangsadresseid,
+        tekst=dto.tekst,
+        x=dto.x,
+        y=dto.y,
+        href=dto.href,
+        status=dto.status,
+        darstatus=dto.darstatus,
+        stormodtagerpostnr=dto.stormodtagerpostnr,
+    )
 
-    @staticmethod
-    def to_building_details_dto(building_details: BuildingDetails) -> BuildingDetailsDTO:
-        return BuildingDetailsDTO(
-            id=building_details.id,
-            year_built=building_details.year_built,
-            area=building_details.area,
-            rooms=building_details.rooms,
-            condition=building_details.condition,
-            wall_conditions=building_details.wall_conditions,
-            roof_conditions=building_details.roof_conditions,
-            floor_conditions=building_details.floor_conditions,
-            windows_doors_conditions=building_details.windows_doors_conditions,
-            moisture_mold=building_details.moisture_mold,
-            electrical_system=building_details.electrical_system,
-            plumbing_system=building_details.plumbing_system,
-            heating_system=building_details.heating_system,
-            asbestos=building_details.asbestos,
-            radon=building_details.radon,
-            lead_paint=building_details.lead_paint,
-            exterior_walls=building_details.exterior_walls,
-            yard_landscaping=building_details.yard_landscaping,
-            driveways_walkways=building_details.driveways_walkways,
-            interior_rooms=building_details.interior_rooms,
-            attic_conditions=building_details.attic_conditions,
-            basement_conditions=building_details.basement_conditions,
-            insulation=building_details.insulation
-        )
+def building_details_to_dto(details: BuildingDetails) -> BuildingDetailsDTO:
+    return BuildingDetailsDTO(
+        id_lokalId=details.id,
+        byg007Bygningsnummer=details.byg007Bygningsnummer,
+        byg021BygningensAnvendelse=details.byg021BygningensAnvendelse,
+        byg026Opførelsesår=details.byg026Opførelsesår,
+        byg032YdervæggensMateriale=details.byg032YdervæggensMateriale,
+        byg033Tagdækningsmateriale=details.byg033Tagdækningsmateriale,
+        byg037KildeTilBygningensMaterialer=details.byg037KildeTilBygningensMaterialer,
+        byg038SamletBygningsareal=details.byg038SamletBygningsareal,
+        byg039BygningensSamledeBoligAreal=details.byg039BygningensSamledeBoligAreal,
+        byg041BebyggetAreal=details.byg041BebyggetAreal,
+        byg053BygningsarealerKilde=details.byg053BygningsarealerKilde,
+        byg054AntalEtager=details.byg054AntalEtager,
+        byg056Varmeinstallation=details.byg056Varmeinstallation,
+        byg058SupplerendeVarme=details.byg058SupplerendeVarme,
+        byg094Revisionsdato=details.byg094Revisionsdato,
+        byg133KildeTilKoordinatsæt=details.byg133KildeTilKoordinatsæt,
+        byg134KvalitetAfKoordinatsæt=details.byg134KvalitetAfKoordinatsæt,
+        byg135SupplerendeOplysningOmKoordinatsæt=details.byg135SupplerendeOplysningOmKoordinatsæt,
+        byg136PlaceringPåSøterritorie=details.byg136PlaceringPåSøterritorie,
+        byg404Koordinat=details.byg404Koordinat,
+        byg406Koordinatsystem=details.byg406Koordinatsystem,
+        forretningshændelse=details.forretningshændelse,
+        forretningsområde=details.forretningsområde,
+        forretningsproces=details.forretningsproces,
+        grund=details.grund,
+        husnummer=details.husnummer,
+        jordstykke=details.jordstykke,
+        kommunekode=details.kommunekode,
+        registreringFra=details.registreringFra,
+        registreringsaktør=details.registreringsaktør,
+        status=details.status,
+        virkningFra=details.virkningFra,
+        virkningsaktør=details.virkningsaktør,
+        etageList=details.etageList,
+        opgangList=details.opgangList,
+    )
 
-    @staticmethod
-    def to_house_details_dto(house_details: HouseDetails) -> HouseDetailsDTO:
-        return HouseDetailsDTO(
-            id=house_details.id,
-            address=house_details.address,
-            year_built=house_details.year_built,
-            total_area=house_details.total_area,
-            number_of_buildings=house_details.number_of_buildings,
-            main_building_details=DTOConverters.to_building_details_dto(house_details.main_building_details),
-            additional_buildings=[DTOConverters.to_building_details_dto(b) for b in house_details.additional_buildings],
-            owner_details=house_details.owner_details.dict(),
-            hustype=house_details.hustype.dict()
-        )
-
-    @staticmethod
-    def to_complete_house_details_dto(complete_house_details: CompleteHouseDetails) -> CompleteHouseDetailsDTO:
-        return CompleteHouseDetailsDTO(
-            **DTOConverters.to_house_details_dto(complete_house_details).dict(),
-            seller_info=complete_house_details.seller_info.dict()
-        )
-
-    @staticmethod
-    def to_house_details(house_details_dto: HouseDetailsDTO) -> HouseDetails:
-        return HouseDetails(
-            id=house_details_dto.id,
-            address=house_details_dto.address,
-            year_built=house_details_dto.year_built,
-            total_area=house_details_dto.total_area,
-            number_of_buildings=house_details_dto.number_of_buildings,
-            main_building_details=BuildingDetails(**house_details_dto.main_building_details.dict()),
-            additional_buildings=[BuildingDetails(**b.dict()) for b in house_details_dto.additional_buildings],
-            owner_details=OwnerDetails(**house_details_dto.owner_details),
-            hustype=Hustype(**house_details_dto.hustype)
-        )
+def dto_to_building_details(dto: BuildingDetailsDTO) -> BuildingDetails:
+    return BuildingDetails(
+        id=dto.id_lokalId,
+        byg007Bygningsnummer=dto.byg007Bygningsnummer,
+        byg021BygningensAnvendelse=dto.byg021BygningensAnvendelse,
+        byg026Opførelsesår=dto.byg026Opførelsesår,
+        byg032YdervæggensMateriale=dto.byg032YdervæggensMateriale,
+        byg033Tagdækningsmateriale=dto.byg033Tagdækningsmateriale,
+        byg037KildeTilBygningensMaterialer=dto.byg037KildeTilBygningensMaterialer,
+        byg038SamletBygningsareal=dto.byg038SamletBygningsareal,
+        byg039BygningensSamledeBoligAreal=dto.byg039BygningensSamledeBoligAreal,
+        byg041BebyggetAreal=dto.byg041BebyggetAreal,
+        byg053BygningsarealerKilde=dto.byg053BygningsarealerKilde,
+        byg054AntalEtager=dto.byg054AntalEtager,
+        byg056Varmeinstallation=dto.byg056Varmeinstallation,
+        byg058SupplerendeVarme=dto.byg058SupplerendeVarme,
+        byg094Revisionsdato=dto.byg094Revisionsdato,
+        byg133KildeTilKoordinatsæt=dto.byg133KildeTilKoordinatsæt,
+        byg134KvalitetAfKoordinatsæt=dto.byg134KvalitetAfKoordinatsæt,
+        byg135SupplerendeOplysningOmKoordinatsæt=dto.byg135SupplerendeOplysningOmKoordinatsæt,
+        byg136PlaceringPåSøterritorie=dto.byg136PlaceringPåSøterritorie,
+        byg404Koordinat=dto.byg404Koordinat,
+        byg406Koordinatsystem=dto.byg406Koordinatsystem,
+        status=dto.status,
+        virkningFra=dto.virkningFra,
+        virkningsaktør=dto.virkningsaktør,
+        etageList=dto.etageList,
+        opgangList=dto.opgangList,
+    )

@@ -1,3 +1,4 @@
+# service.py
 import re
 import bcrypt
 from user_microservices.app_user.dal import UserRepository
@@ -16,7 +17,7 @@ class UserService:
             raise ValueError("Invalid email format")
         
         try:
-            role_enum = UserRole[role]
+            role_enum = UserRole[role.upper()]  # Convert role to uppercase
         except KeyError:
             raise ValueError("Invalid role specified")
         
@@ -31,7 +32,7 @@ class UserService:
         return user_data
 
     def get_user(self, user_id):
-        user = self.user_repository.get_user(user_id)
+        user = self.user_repository.get_user_by_id(user_id)
         return UserConverter.to_dto(user) if user else None
 
     def update_user(self, user_id, update_data):
@@ -43,11 +44,12 @@ class UserService:
     
     def login_user(self, username, password):
         user = self.user_repository.get_user_by_username(username)
-        if user and bcrypt.checkpw(password.encode('utf-8'), user.password_hash):
-        # Check if role is an enum before accessing .name
-            role_str = user.role.name if isinstance(user.role, UserRole) else UserRole(user.role).name
-            token = self.jwt_service.generate_token(user.user_id, role_str)
-            return {"token": token, "user_id": str(user.user_id), "role": role_str}
-        else:
-            raise ValueError("Invalid username or password")
-
+        if user:
+            password_hash = user.password_hash
+            if isinstance(password_hash, str):
+                password_hash = password_hash.encode('utf-8')
+            if bcrypt.checkpw(password.encode('utf-8'), password_hash):
+                role_str = user.role.name if isinstance(user.role, UserRole) else UserRole(user.role).name
+                token = self.jwt_service.generate_token(user.user_id, role_str)
+                return {"token": token, "user_id": str(user.user_id), "role": role_str}
+        raise ValueError("Invalid username or password")

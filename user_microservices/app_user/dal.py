@@ -1,8 +1,9 @@
+# repository.py
 from bson.objectid import ObjectId
 from shared.database import Database
-from user_microservices.app_user.enums import UserRole  # Adjust this import based on your project structure
+from user_microservices.app_user.enums import UserRole
 from user_microservices.app_user.models import User
-from enum import Enum  # Ensuring Enum is imported
+from enum import Enum
 
 class UserRepository:
     def __init__(self):
@@ -21,7 +22,7 @@ class UserRepository:
             "username": username,
             "email": email,
             "password_hash": hashed_password,
-            "role": role.value if isinstance(role, Enum) else role  # Consider enforcing UserRole only
+            "role": role.name  # Store role as string
         }
         result = self.collection.insert_one(user_data)
         user_data['_id'] = str(result.inserted_id)

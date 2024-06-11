@@ -1,27 +1,40 @@
+# building_microservices/app_building/dtos/building_details_dto.py
 from pydantic import BaseModel
-from typing import Optional
+from typing import List, Optional
 
 class BuildingDetailsDTO(BaseModel):
-    id: str
-    year_built: int
-    area: int
-    rooms: int
-    condition: str
-    wall_conditions: Optional[str] = None
-    roof_conditions: Optional[str] = None
-    floor_conditions: Optional[str] = None
-    windows_doors_conditions: Optional[str] = None
-    moisture_mold: Optional[str] = None
-    electrical_system: Optional[str] = None
-    plumbing_system: Optional[str] = None
-    heating_system: Optional[str] = None
-    asbestos: Optional[str] = None
-    radon: Optional[str] = None
-    lead_paint: Optional[str] = None
-    exterior_walls: Optional[str] = None
-    yard_landscaping: Optional[str] = None
-    driveways_walkways: Optional[str] = None
-    interior_rooms: Optional[str] = None
-    attic_conditions: Optional[str] = None
-    basement_conditions: Optional[str] = None
-    insulation: Optional[str] = None
+    id_lokalId: str
+    byg007Bygningsnummer: int
+    byg021BygningensAnvendelse: str
+    byg026Opførelsesår: int
+    byg032YdervæggensMateriale: str
+    byg033Tagdækningsmateriale: str
+    byg037KildeTilBygningensMaterialer: str
+    byg038SamletBygningsareal: int
+    byg039BygningensSamledeBoligAreal: int
+    byg041BebyggetAreal: int
+    byg053BygningsarealerKilde: str
+    byg054AntalEtager: int
+    byg056Varmeinstallation: str
+    byg058SupplerendeVarme: str
+    byg094Revisionsdato: str
+    byg133KildeTilKoordinatsæt: str
+    byg134KvalitetAfKoordinatsæt: str
+    byg135SupplerendeOplysningOmKoordinatsæt: str
+    byg136PlaceringPåSøterritorie: str
+    byg404Koordinat: str
+    byg406Koordinatsystem: str
+    forretningshændelse: Optional[str] = None
+    forretningsområde: Optional[str] = None
+    forretningsproces: Optional[str] = None
+    grund: Optional[str] = None
+    husnummer: Optional[str] = None
+    jordstykke: Optional[str] = None
+    kommunekode: Optional[str] = None
+    registreringFra: Optional[str] = None
+    registreringsaktør: Optional[str] = None
+    status: Optional[str] = None
+    virkningFra: Optional[str] = None
+    virkningsaktør: Optional[str] = None
+    etageList: Optional[List] = []
+    opgangList: Optional[List] = []

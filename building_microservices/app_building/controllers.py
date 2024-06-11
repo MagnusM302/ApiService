@@ -1,47 +1,58 @@
-from flask import Blueprint, request, jsonify
-from app_building.services import BuildingService
-from dtos.dto_converters import DTOConverters
-import logging
+from flask import Blueprint, jsonify, request
+from shared.json_utils import JsonUtils
+from shared.auth_service import JWTService
+from app_building.services.interfaces import IBuildingService
 
-controller = Blueprint('controller', __name__)
+def create_blueprint(building_service: IBuildingService):
+    blueprint = Blueprint('app', __name__)
 
-@controller.route('/api/get_address', methods=['GET'])
-def get_address():
-    address = request.args.get('address')
-    try:
-        address_dto = BuildingService.get_address(address)
-        return jsonify(address_dto.dict())
-    except Exception as e:
-        logging.error(f'Failed to fetch address details: {e}')
-        return jsonify({'error': str(e)}), 500
+    @blueprint.route('/address', methods=['GET'])
+    @JWTService.token_required
+    @JWTService.role_required(['INSPECTOR'])
+    def get_address():
+        address = request.args.get('address')
+        if not address:
+            return jsonify({'error': 'Address parameter is required'}), 400
+        try:
+            address_dto = building_service.get_address(address)
+            return jsonify(address_dto.dict()), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
 
-@controller.route('/api/get_address_details', methods=['GET'])
-def get_address_details():
-    address_id = request.args.get('address_id')
-    try:
-        address_details = BuildingService.get_address_details(address_id)
-        return jsonify(address_details)
-    except Exception as e:
-        logging.error(f'Failed to fetch address details: {e}')
-        return jsonify({'error': str(e)}), 500
+    @blueprint.route('/address/<string:address_id>', methods=['GET'])
+    @JWTService.token_required
+    @JWTService.role_required(['INSPECTOR'])
+    def get_address_details(address_id):
+        try:
+            address_dto = building_service.get_address_details(address_id)
+            return jsonify(address_dto.dict()), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
 
-@controller.route('/api/get_building_details', methods=['GET'])
-def get_building_details():
-    building_id = request.args.get('building_id')  # Parameter to reflect building_id
-    try:
-        building_details_dto = BuildingService.get_building_details(building_id)
-        return jsonify(building_details_dto.dict())
-    except Exception as e:
-        logging.error(f'Failed to fetch building details: {e}')
-        return jsonify({'error': str(e)}), 500
-
-@controller.route('/api/full_details', methods=['GET'])
-def full_details():
-    address = request.args.get('address')
-    try:
-        complete_house_details_dto = BuildingService.get_complete_house_details(address)
-        return jsonify(complete_house_details_dto.dict())
-    except Exception as e:
-        logging.error(f'Failed to fetch full details: {e}')
-        return jsonify({'error': str(e)}), 500
-
+    @blueprint.route('/building/<string:building_id>', methods=['GET'])
+    @JWTService.token_required
+    @JWTService.role_required(['INSPECTOR'])
+    def get_building_details(building_id):
+        try:
+            building_details_dto = building_service.get_building_details(building_id)
+            return jsonify(building_details_dto.dict()), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+    
+    @blueprint.route('/building/<string:building_id>/square_meters', methods=['GET'])
+    @JWTService.token_required
+    @JWTService.role_required(['INSPECTOR'])
+    def get_building_square_meters(building_id):
+        try:
+            building_details_dto = building_service.get_building_details(building_id)
+            square_meters_dto = {
+                "id_lokalId": building_id,
+                "samlet_bygningsareal": building_details_dto.byg038SamletBygningsareal,
+                "samlede_boligareal": building_details_dto.byg039BygningensSamledeBoligAreal,
+                "bebygget_areal": building_details_dto.byg041BebyggetAreal
+            }
+            return jsonify(square_meters_dto), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        
+    return blueprint

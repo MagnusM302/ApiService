@@ -35,16 +35,25 @@ class JWTService:
     def token_required(f):
         @wraps(f)
         def decorated(*args, **kwargs):
-            token = request.headers.get('Authorization')
-            if not token:
+            auth_header = request.headers.get('Authorization')
+            if not auth_header:
                 return jsonify({'message': 'A valid token is missing'}), 403
+
+            token = None
+            if auth_header.startswith('Bearer '):
+                token = auth_header.split(" ")[1]  # Fjern 'Bearer ' præfikset
+            else:
+                return jsonify({'message': 'Invalid token format'}), 403
 
             try:
                 decoded_token = jwt.decode(token, JWTService.secret_key, algorithms=[JWTService.algorithm])
-                # Tilføj yderligere validering efter behov
+                print(f"Decoded Token: {decoded_token}")  # Log decoded token
             except jwt.ExpiredSignatureError:
                 return jsonify({'message': 'Token expired'}), 401
             except jwt.InvalidTokenError:
+                return jsonify({'message': 'Invalid token'}), 401
+            except Exception as e:
+                print(f"Token decode error: {str(e)}")
                 return jsonify({'message': 'Invalid token'}), 401
 
             return f(*args, **kwargs)
@@ -55,15 +64,27 @@ class JWTService:
         def decorator(f):
             @wraps(f)
             def decorated_function(*args, **kwargs):
-                token = request.headers.get('Authorization')
-                if not token:
+                auth_header = request.headers.get('Authorization')
+                if not auth_header:
                     return jsonify({'message': 'A valid token is missing'}), 403
+
+                token = None
+                if auth_header.startswith('Bearer '):
+                    token = auth_header.split(" ")[1]  # Fjern 'Bearer ' præfikset
+                else:
+                    return jsonify({'message': 'Invalid token format'}), 403
 
                 try:
                     decoded_token = jwt.decode(token, JWTService.secret_key, algorithms=[JWTService.algorithm])
                     user_role = decoded_token['role']
+                    print(f"Decoded Token: {decoded_token}")  # Log decoded token
+                except jwt.ExpiredSignatureError:
+                    return jsonify({'message': 'Token expired'}), 401
+                except jwt.InvalidTokenError:
+                    return jsonify({'message': 'Invalid token'}), 401
                 except Exception as e:
-                    return jsonify({'message': 'Token is invalid or expired', 'error': str(e)}), 403
+                    print(f"Token decode error: {str(e)}")
+                    return jsonify({'message': 'Invalid token'}), 401
 
                 if user_role not in allowed_roles:
                     return jsonify({'message': 'Permission denied'}), 403

@@ -1,25 +1,29 @@
-# building_microservices/app_building/models/address.py
+# models/address.py
+
 from pydantic import BaseModel
 from typing import Optional
 
 class Address(BaseModel):
     id: str
-    status: int
-    darstatus: int
-    vejkode: str
+    status: Optional[int]
+    darstatus: Optional[int]
+    vejkode: Optional[str]
     vejnavn: str
-    adresseringsvejnavn: str
+    adresseringsvejnavn: Optional[str]
     husnr: str
     etage: Optional[str] = None
     dør: Optional[str] = None
     supplerendebynavn: Optional[str] = None
     postnr: str
     postnrnavn: str
-    stormodtagerpostnr: bool
+    stormodtagerpostnr: Optional[bool] = False
     stormodtagerpostnrnavn: Optional[str] = None
-    kommunekode: str
+    kommunekode: Optional[str]
     adgangsadresseid: str
-    x: float
-    y: float
-    href: str
-    tekst: Optional[str] = None
+    x: Optional[float]
+    y: Optional[float]
+    href: Optional[str]
+    tekst: Optional[str] = ""
+
+    class Config:
+        arbitrary_types_allowed = True

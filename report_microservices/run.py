@@ -1,46 +1,55 @@
-import sys
 import os
-from multiprocessing import Process
+import sys
 from flask import Flask
 from flask_cors import CORS
+from multiprocessing import Process
+import logging
 
-# Tilføj de nødvendige systemstier for adgang til delte moduler og tjenester
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-sys.path.append(current_dir)
-sys.path.append(parent_dir)
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from report_microservices.app_report.controllers import setup_routes
-from report_microservices.app_report.services import ReportService
+def set_sys_path():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    sys.path.append(current_dir)
+    sys.path.append(parent_dir)
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-# Custom module imports from shared
+set_sys_path()
+
+# Import service-specific modules
+from app_report.services.services import ReportService
+from report_microservices.app_report.client.building_service_client import BuildingServiceClient
+from app_report.controllers import create_blueprint  # Ensure correct import
 from shared.custom_logging import setup_logging
 from shared.custom_dotenv import load_env_variables
+from report_microservices.app_report.data.report_repository import ReportRepository  # Use concrete implementation
+from shared.database import Database  # Import Database class
 
-# Load environment variables using the custom function from shared
+# Load environment variables
 load_env_variables()
 
-def create_report_app():
+def create_app():
     app = Flask(__name__)
-    CORS(app)  # Enable Cross-Origin Resource Sharing if needed
+    CORS(app, resources={r"/*": {"origins": "*"}})
+    
+    # Create service clients and services
+    building_service_client = BuildingServiceClient(base_url="http://localhost:5005/api")
+    report_repository = ReportRepository()
+    report_service = ReportService(building_service_client, report_repository)
+    
+    # Register the blueprint with the Flask app
+    blueprint = create_blueprint(report_service)
+    app.register_blueprint(blueprint, url_prefix='/api/reports')
 
-    # Initialize the report service
-    report_service = ReportService()
-
-    # Setup routes with the initialized service
-    setup_routes(app, report_service)
-
+    app.config['PORT'] = 5006
     return app
 
-def run_http():
-    app = create_report_app()
-    app.run(host='0.0.0.0', port=5003, debug=True, use_reloader=False)
+def run_http(app):
+    app.run(host='0.0.0.0', port=app.config['PORT'], debug=True, use_reloader=False)
 
-if __name__ == '__main__':
-    # Ensure the logging is set up only in the main process
+def run_report_http():
+    app = create_app()
+    run_http(app)
+
+if __name__ == "__main__":
     setup_logging()
-
-    # Start the HTTP server process
-    http_process = Process(target=run_http)
-    http_process.start()
-    http_process.join()
+    logging.info("Starting Report Service...")
+    run_report_http()
