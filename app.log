@@ -30,3 +30,27 @@
 2024-06-09 13:15:44,527 - INFO -  * Restarting with stat
 2024-06-09 13:15:46,267 - WARNING -  * Debugger is active!
 2024-06-09 13:15:46,279 - INFO -  * Debugger PIN: 585-526-218
+2024-06-12 09:40:01,414 - INFO - Starting Report Service...
+2024-06-12 09:40:02,306 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5006
+ * Running on http://10.0.0.6:5006
+2024-06-12 09:40:02,307 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-12 09:40:10,911 - INFO - 127.0.0.1 - - [12/Jun/2024 09:40:10] "[33mOPTIONS /generate_report HTTP/1.1[0m" 404 -
+2024-06-12 09:40:31,430 - INFO - 127.0.0.1 - - [12/Jun/2024 09:40:31] "[33mGET /generate_report HTTP/1.1[0m" 404 -
+2024-06-12 09:40:32,648 - INFO - 127.0.0.1 - - [12/Jun/2024 09:40:32] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-06-12 09:41:45,400 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.0.0.6:5000
+2024-06-12 09:41:45,401 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-12 09:42:33,266 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://10.0.0.6:5002
+2024-06-12 09:42:33,266 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-12 09:42:57,030 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5005
+ * Running on http://10.0.0.6:5005
+2024-06-12 09:42:57,031 - INFO - [33mPress CTRL+C to quit[0m

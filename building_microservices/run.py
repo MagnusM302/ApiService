@@ -1,8 +1,8 @@
 import os
 import sys
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
-from multiprocessing import Process
+import logging
 
 def set_sys_path():
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -25,7 +25,13 @@ load_env_variables()
 
 def create_building_app():
     app = Flask(__name__)
-    CORS(app, resources={r"/*": {"origins": "*"}})
+    CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"], "allow_headers": "*"}})
+    
+    @app.before_request
+    def log_request_info():
+        if request.method == 'OPTIONS':
+            print(f'OPTIONS request: {request.url}')
+    
     repository = BuildingRepository()
     building_service = BuildingService(repository)
     blueprint = create_blueprint(building_service)

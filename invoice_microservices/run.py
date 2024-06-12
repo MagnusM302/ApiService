@@ -1,8 +1,8 @@
 import os
 import sys
-from flask import Flask
+from flask import Flask,request
 from flask_cors import CORS
-from multiprocessing import Process
+import logging
 
 def set_sys_path():
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -13,7 +13,7 @@ def set_sys_path():
 
 set_sys_path()
 
-# Ensure shared utilities and services are accessible
+# Import service-specific modules
 from invoice_microservices.app_invoice.controllers.invoice_controller import invoice_blueprint
 from shared.custom_logging import setup_logging
 from shared.custom_dotenv import load_env_variables
@@ -24,19 +24,25 @@ load_env_variables()
 def create_invoice_app():
     """Create and configure an instance of the Flask application."""
     app = Flask(__name__)
-    CORS(app, resources={r"/*": {"origins": "*"}})
+    CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"], "allow_headers": "*"}})
+    
+    @app.before_request
+    def log_request_info():
+        if request.method == 'OPTIONS':
+            print(f'OPTIONS request: {request.url}')
+    
     # Setup routes with the initialized services
     app.register_blueprint(invoice_blueprint, url_prefix='/api/invoices')
+    app.config['PORT'] = 5002
     return app
 
 def run_http(app):
-    app.run(host='0.0.0.0', port=5002, debug=True, use_reloader=False)
+    app.run(host='0.0.0.0', port=app.config['PORT'], debug=True, use_reloader=False)
 
 def run_invoice_http():
     app = create_invoice_app()
     run_http(app)
 
 if __name__ == '__main__':
-    # Ensure the logging is set up only in the main process
     setup_logging()
     run_invoice_http()

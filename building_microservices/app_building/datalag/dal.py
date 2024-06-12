@@ -6,21 +6,14 @@ from shared.enums import (
     Varmeinstallation, YdervæggensMateriale, TagdækningsMateriale,
     BygningensAnvendelse, KildeTilBygningensMaterialer, SupplerendeVarme
 )
-from shared.database import Database
 
 class BuildingRepository(IBuildingRepository):
     def __init__(self, http_client=requests):
         self.http_client = http_client
         self.username = "XJCGPDGQSM"
         self.password = "$Skole1234"
-        self.address_collection = Database.get_collection('addresses')
-        self.building_collection = Database.get_collection('buildings')
 
     def fetch_address(self, address: str) -> Address:
-        existing_address = self.address_collection.find_one({"tekst": address})
-        if existing_address:
-            return Address(**existing_address)
-
         logging.info(f"Fetching address for: {address}")
         try:
             params = {'q': address, 'type': 'adresse'}
@@ -35,7 +28,7 @@ class BuildingRepository(IBuildingRepository):
                 raise ValueError("No address data found")
             data = address_data[0]['data']
             tekst = data.get('tekst', f"{data.get('vejnavn', '')} {data.get('husnr', '')}, {data.get('postnr', '')} {data.get('postnrnavn', '')}")
-            new_address = Address(
+            return Address(
                 id=data.get('id', ''),
                 status=data.get('status', ''),
                 darstatus=data.get('darstatus', ''),
@@ -57,17 +50,11 @@ class BuildingRepository(IBuildingRepository):
                 href=data.get('href', ''),
                 tekst=tekst
             )
-            self.address_collection.insert_one(new_address.dict())
-            return new_address
         except requests.RequestException as e:
             logging.error(f"Error fetching address: {e}")
             raise
 
     def fetch_address_details(self, address_id: str) -> Address:
-        existing_address = self.address_collection.find_one({"id": address_id})
-        if existing_address:
-            return Address(**existing_address)
-
         logging.info(f"Fetching address details for ID: {address_id}")
         try:
             url = f'https://services.datafordeler.dk/DAR/DAR/3.0.0/rest/adresse?id={address_id}'
@@ -84,7 +71,7 @@ class BuildingRepository(IBuildingRepository):
             data = address_details[0]
             address_parts = data['adressebetegnelse'].split(',')
             vejnavn_husnr = address_parts[0].strip().split(' ', 1) if len(address_parts) > 0 else ["", ""]
-            new_address = Address(
+            return Address(
                 id=data.get('id_lokalId', ''),
                 status=data.get('status', ''),
                 darstatus=None,
@@ -106,17 +93,11 @@ class BuildingRepository(IBuildingRepository):
                 href=None,
                 tekst=None
             )
-            self.address_collection.insert_one(new_address.dict())
-            return new_address
         except requests.RequestException as e:
             logging.error(f"Error fetching address details for ID {address_id}: {e}")
             raise
 
     def fetch_building_details(self, building_id: str) -> BuildingDetails:
-        existing_building = self.building_collection.find_one({"id": building_id})
-        if existing_building:
-            return BuildingDetails.from_dict(existing_building)
-
         logging.info(f"Fetching building details for ID: {building_id}")
         try:
             params = {'id': building_id, 'username': self.username, 'password': self.password}
@@ -130,21 +111,23 @@ class BuildingRepository(IBuildingRepository):
             if not building_data:
                 raise ValueError("No building data found")
             data = building_data[0] if isinstance(building_data, list) else building_data
-            new_building = BuildingDetails(
+
+            # Convert enums to their respective values for use
+            return BuildingDetails(
                 id=data['id_lokalId'],
                 byg007Bygningsnummer=data.get('byg007Bygningsnummer'),
-                byg021BygningensAnvendelse=BygningensAnvendelse(data.get('byg021BygningensAnvendelse')),
+                byg021BygningensAnvendelse=BygningensAnvendelse(data.get('byg021BygningensAnvendelse')).value,
                 byg026Opførelsesår=data.get('byg026Opførelsesår'),
-                byg032YdervæggensMateriale=YdervæggensMateriale(data.get('byg032YdervæggensMateriale')),
-                byg033Tagdækningsmateriale=TagdækningsMateriale(data.get('byg033Tagdækningsmateriale')),
-                byg037KildeTilBygningensMaterialer=KildeTilBygningensMaterialer(data.get('byg037KildeTilBygningensMaterialer')),
+                byg032YdervæggensMateriale=YdervæggensMateriale(data.get('byg032YdervæggensMateriale')).value,
+                byg033Tagdækningsmateriale=TagdækningsMateriale(data.get('byg033Tagdækningsmateriale')).value,
+                byg037KildeTilBygningensMaterialer=KildeTilBygningensMaterialer(data.get('byg037KildeTilBygningensMaterialer')).value,
                 byg038SamletBygningsareal=data.get('byg038SamletBygningsareal'),
                 byg039BygningensSamledeBoligAreal=data.get('byg039BygningensSamledeBoligAreal'),
                 byg041BebyggetAreal=data.get('byg041BebyggetAreal'),
                 byg053BygningsarealerKilde=data.get('byg053BygningsarealerKilde'),
                 byg054AntalEtager=data.get('byg054AntalEtager'),
-                byg056Varmeinstallation=Varmeinstallation(data.get('byg056Varmeinstallation')),
-                byg058SupplerendeVarme=SupplerendeVarme(data.get('byg058SupplerendeVarme')),
+                byg056Varmeinstallation=Varmeinstallation(data.get('byg056Varmeinstallation')).value,
+                byg058SupplerendeVarme=SupplerendeVarme(data.get('byg058SupplerendeVarme')).value,
                 byg094Revisionsdato=data.get('byg094Revisionsdato'),
                 byg133KildeTilKoordinatsæt=data.get('byg133KildeTilKoordinatsæt'),
                 byg134KvalitetAfKoordinatsæt=data.get('byg134KvalitetAfKoordinatsæt'),
@@ -167,8 +150,6 @@ class BuildingRepository(IBuildingRepository):
                 etageList=data.get('etageList', []),
                 opgangList=data.get('opgangList', [])
             )
-            self.building_collection.insert_one(new_building.dict())
-            return new_building
         except requests.RequestException as e:
             logging.error(f"Error fetching building details: {e}")
             raise

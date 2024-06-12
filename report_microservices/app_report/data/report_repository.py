@@ -32,7 +32,7 @@ class ReportRepository(IReportRepository):
         self.collection.delete_one({"_id": ObjectId(report_id)})
     
     def save_customer_report(self, customer_report: CustomerReport):
-        customer_report_dict = customer_report.dict()
+        customer_report_dict = customer_report.model_dump()
         self.customer_report_collection.insert_one(customer_report_dict)
 
     def get_customer_report(self, report_id: str) -> Optional[CustomerReport]:
