@@ -23,7 +23,7 @@ load_env_variables()
 
 def create_user_app():
     app = Flask(__name__)
-    CORS(app, resources={r"/*": {"origins": "*"}})
+    CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]}}) 
     register_user_routes(app)
     app.config['PORT'] = 5000
     return app

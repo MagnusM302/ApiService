@@ -4,8 +4,6 @@ import unittest
 import requests
 from multiprocessing import Process
 from time import sleep
-from pymongo import MongoClient
-import bcrypt
 from enum import Enum
 
 # Add the root directory of the project to PYTHONPATH
@@ -25,7 +23,7 @@ def run_building_service():
 USER_SERVICE_URL = "http://localhost:5001"
 BUILDING_SERVICE_URL = "http://localhost:5005"
 
-USERNAME = "benja14"
+USERNAME = "tryk12"
 PASSWORD = "12345678"
 ADDRESS = "kærvej 7, 9800"
 
@@ -45,26 +43,10 @@ class TestBuildingService(unittest.TestCase):
         
         sleep(30)  # Give the services time to start
 
-        cls.client = MongoClient('mongodb+srv://buildingDBuser:$Skole1234@cluster0.dezwb5i.mongodb.net/BuildingReportsDB?retryWrites=true&w=majority')
-        cls.db = cls.client['BuildingReportsDB']
-        cls.users_collection = cls.db['users']
-
         cls.inspector_credentials = {
             "username": USERNAME,
             "password": PASSWORD
         }
-        cls.inspector_details = {
-            "name": "Inspector User",
-            "address": "123 Inspector St",
-            "post_number": "1234",
-            "phone": "12345678",
-            "username": cls.inspector_credentials['username'],
-            "email": "inspector@example.com",
-            "role": UserRole.INSPECTOR.value,
-            "password_hash": bcrypt.hashpw(cls.inspector_credentials['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-        }
-        if cls.users_collection.find_one({"username": cls.inspector_credentials['username']}) is None:
-            cls.users_collection.insert_one(cls.inspector_details)
 
         login_url = f"{USER_SERVICE_URL}/login"
         login_data = {"username": USERNAME, "password": PASSWORD}
@@ -79,8 +61,6 @@ class TestBuildingService(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.users_collection.delete_many({"username": cls.inspector_credentials['username']})
-        
         cls.user_service_process.terminate()
         cls.user_service_process.join()
         

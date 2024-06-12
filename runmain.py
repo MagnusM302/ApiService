@@ -3,6 +3,7 @@ import sys
 from multiprocessing import Process
 
 def add_project_to_sys_path():
+    """Adds the project root to the system path for module resolution."""
     root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     if root_path not in sys.path:
         sys.path.append(root_path)
@@ -32,18 +33,20 @@ def start_building_service():
     run_building_http()
 
 def run_service(service_func):
+    """Runs a service function in a separate process."""
     process = Process(target=service_func)
     process.start()
     return process
 
 if __name__ == '__main__':
+    # Start each microservice in a separate process
     user_process = run_service(start_user_service)
     report_process = run_service(start_report_service)
     invoice_process = run_service(start_invoice_service)
-    building_process = run_service(start_building_service)  # Start the new service
+    building_process = run_service(start_building_service)
 
-    # Optionally join processes if you want to wait for them
+    # Optionally join processes if you want to wait for them to complete
     user_process.join()
     report_process.join()
     invoice_process.join()
-    building_process.join()  # Join the new service process
+    building_process.join()

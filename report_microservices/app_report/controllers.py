@@ -7,19 +7,18 @@ from app_report.services.iservices import IReportService
 def create_blueprint(report_service: IReportService):
     blueprint = Blueprint('reports', __name__)
 
-    # Endpoint for generating a report (Inspector only)
-    @blueprint.route('/generate_report', methods=['GET'])
+    @blueprint.route('/generate_report', methods=['POST'])
     @JWTService.token_required
     @JWTService.role_required(['INSPECTOR'])
     def generate_report():
-        building_id = request.args.get('building_id')
-        address_id = request.args.get('address_id')
+        data = request.json
+        address = data.get('address')
         
-        if not building_id or not address_id:
-            return jsonify({"error": "building_id and address_id are required"}), 400
+        if not address:
+            return jsonify({"error": "Address is required"}), 400
         
         try:
-            report = report_service.generate_report(building_id, address_id)
+            report = report_service.generate_report(address)
         except Exception as e:
             return jsonify({"error": str(e)}), 500
         
@@ -28,7 +27,6 @@ def create_blueprint(report_service: IReportService):
         
         return jsonify(report.model_dump())
 
-    # Endpoint for retrieving a report (Inspector only)
     @blueprint.route('/get_report/<report_id>', methods=['GET'])
     @JWTService.token_required
     @JWTService.role_required(['INSPECTOR'])
@@ -43,7 +41,6 @@ def create_blueprint(report_service: IReportService):
         
         return jsonify(report.model_dump())
 
-    # Endpoint for updating a report (Inspector only)
     @blueprint.route('/update_report/<report_id>', methods=['PUT'])
     @JWTService.token_required
     @JWTService.role_required(['INSPECTOR'])
@@ -57,7 +54,6 @@ def create_blueprint(report_service: IReportService):
         
         return jsonify({"status": "Report updated successfully"})
 
-    # Endpoint for deleting a report (Inspector only)
     @blueprint.route('/delete_report/<report_id>', methods=['DELETE'])
     @JWTService.token_required
     @JWTService.role_required(['INSPECTOR'])
@@ -69,7 +65,6 @@ def create_blueprint(report_service: IReportService):
         
         return jsonify({"status": "Report deleted successfully"})
 
-    # Endpoint for submitting a customer report (Customer only)
     @blueprint.route('/submit_customer_report', methods=['POST'])
     @JWTService.token_required
     @JWTService.role_required(['CUSTOMER'])
@@ -83,7 +78,6 @@ def create_blueprint(report_service: IReportService):
         
         return jsonify({"status": "Customer report submitted successfully", "report_id": report_id})
 
-    # Endpoint for creating a complete report from customer report (Inspector only)
     @blueprint.route('/create_complete_report/<customer_report_id>', methods=['POST'])
     @JWTService.token_required
     @JWTService.role_required(['INSPECTOR'])
@@ -98,7 +92,6 @@ def create_blueprint(report_service: IReportService):
         
         return jsonify(complete_report.model_dump())
 
-    # Endpoint for deleting a customer report (Inspector only)
     @blueprint.route('/delete_customer_report/<report_id>', methods=['DELETE'])
     @JWTService.token_required
     @JWTService.role_required(['INSPECTOR'])
