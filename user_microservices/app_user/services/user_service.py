@@ -1,16 +1,17 @@
 # service.py
 import re
 import bcrypt
-from user_microservices.app_user.dal import UserRepository
-from user_microservices.app_user.models import User, UserRole
-from user_microservices.app_user.converters import UserConverter
-from user_microservices.app_user.dto import UserDTO
+from user_microservices.app_user.dal.i_user_repository import IUserRepository
+from user_microservices.app_user.models.user import User
+from user_microservices.app_user.models.user_role import UserRole
+from user_microservices.app_user.dto.converters import UserConverter
+from user_microservices.app_user.dto.user_dto import UserDTO
 from shared.auth_service import JWTService
 
 class UserService:
-    def __init__(self):
-        self.user_repository = UserRepository()
-        self.jwt_service = JWTService()  
+    def __init__(self, user_repository: IUserRepository):
+        self.user_repository = user_repository
+        self.jwt_service = JWTService()
 
     def register_user(self, name, address, post_number, phone, username, email, password, role):
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):

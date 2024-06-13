@@ -54,3 +54,71 @@
  * Running on http://127.0.0.1:5005
  * Running on http://10.0.0.6:5005
 2024-06-12 09:42:57,031 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-12 16:45:46,349 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.0.0.6:5000
+2024-06-12 16:45:46,351 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-12 16:50:32,256 - INFO - Starting Report Service...
+2024-06-12 16:50:33,137 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5006
+ * Running on http://10.0.0.6:5006
+2024-06-12 16:50:33,138 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-12 16:51:01,146 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.0.0.6:5000
+2024-06-12 16:51:01,147 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-12 16:51:54,826 - INFO - Starting Report Service...
+2024-06-12 16:51:55,693 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5006
+ * Running on http://10.0.0.6:5006
+2024-06-12 16:51:55,694 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-12 16:59:27,857 - INFO - Starting User Service...
+2024-06-12 16:59:28,750 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.0.0.6:5000
+2024-06-12 16:59:28,751 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-12 17:00:01,126 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5005
+ * Running on http://10.0.0.6:5005
+2024-06-12 17:00:01,126 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-12 17:01:56,462 - INFO - Starting Building Service...
+2024-06-12 17:01:57,365 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5005
+ * Running on http://10.0.0.6:5005
+2024-06-12 17:01:57,366 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-12 17:26:17,953 - INFO - Starting Invoice Service...
+2024-06-12 17:26:18,826 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://10.0.0.6:5002
+2024-06-12 17:26:18,828 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-12 17:26:31,015 - INFO - Starting Building Service...
+2024-06-12 17:26:31,882 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5005
+ * Running on http://10.0.0.6:5005
+2024-06-12 17:26:31,883 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-12 17:36:53,561 - INFO - Starting User Service...
+2024-06-12 17:36:54,435 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.0.0.6:5000
+2024-06-12 17:36:54,436 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-12 17:37:14,094 - INFO - 127.0.0.1 - - [12/Jun/2024 17:37:14] "OPTIONS /login HTTP/1.1" 200 -
+2024-06-12 17:37:14,356 - INFO - 127.0.0.1 - - [12/Jun/2024 17:37:14] "[33mPOST /login HTTP/1.1[0m" 404 -
+2024-06-13 10:18:22,110 - INFO - Starting Services...
+2024-06-13 10:40:36,827 - INFO - Starting Services...
+2024-06-13 14:30:30,081 - INFO - Starting Services...
+2024-06-13 15:13:33,073 - INFO - Starting Services...
+2024-06-13 15:23:10,921 - INFO - Starting Services...
+2024-06-13 15:53:39,406 - INFO - Starting Services...
+2024-06-13 16:45:43,025 - INFO - Starting Services...
+2024-06-13 16:56:39,948 - INFO - Starting Services...
+2024-06-13 17:55:21,329 - INFO - Starting Services...

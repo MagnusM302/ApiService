@@ -1,16 +1,15 @@
 from datetime import datetime
-from ..data.invoice_respository import InvoiceRepository
+from ..dal.invoice_repository import InvoiceRepository
 from ..dto.converters import InvoiceConverter
 from ..dto.invoice_dto import InvoiceDTO
 from shared.exceptions import ResourceNotFound
 from invoice_microservices.app_invoice.services.interface import IInvoiceService
-from invoice_microservices.app_invoice.data.interface import IInvoiceRepository
+from invoice_microservices.app_invoice.dal.i_invoice_repository import IInvoiceRepository
 
 
 class InvoiceService(IInvoiceService):
-    def __init__(self, repository: IInvoiceRepository = InvoiceRepository()):
-        self.invoice_repository = repository
-        self.invoice_converter = InvoiceConverter()
+    def __init__(self, repository: InvoiceRepository):
+        self.repository = repository
 
     def calculate_price(self, square_meters: float) -> float:
         if square_meters <= 120:

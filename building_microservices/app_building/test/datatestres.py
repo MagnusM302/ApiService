@@ -15,7 +15,7 @@ sys.path.append(parent_dir)    # Adding the parent directory to the system path
 sys.path.append(grandparent_dir)  # Adding the grandparent directory to the system path
 sys.path.append(great_grandparent_dir)  # Adding the great grandparent directory to the system path
 
-from building_microservices.app_building.datalag.dal import BuildingRepository
+from building_microservices.app_building.dal.building_repository import BuildingRepository
 from shared.enums import (
     Varmeinstallation, YdervæggensMateriale, TagdækningsMateriale,
     BygningensAnvendelse, KildeTilBygningensMaterialer, SupplerendeVarme

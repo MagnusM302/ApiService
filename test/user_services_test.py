@@ -5,7 +5,7 @@ import time
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 import bcrypt
-from user_microservices.app_user.enums import UserRole
+from user_microservices.app_user.models.user_role import UserRole
 
 class TestUserServiceIntegration(unittest.TestCase):
     @classmethod
@@ -27,7 +27,7 @@ class TestUserServiceIntegration(unittest.TestCase):
         cls.inspector_details = {
             "name": "Inspector User",
             "address": "123 Inspector St",
-            "post_number": "1234",
+            "post_number": "8234",
             "phone": "12345678",
             "username": cls.inspector_credentials['username'],
             "email": "inspector@example.com",
@@ -47,7 +47,7 @@ class TestUserServiceIntegration(unittest.TestCase):
         cls.client.close()
 
     def setUp(self):
-        self.base_url = 'http://localhost:5001'
+        self.base_url = 'http://localhost:5000'
         self.login_url = f'{self.base_url}/login'
         self.register_url = f'{self.base_url}/register'
         self.new_user_details = {

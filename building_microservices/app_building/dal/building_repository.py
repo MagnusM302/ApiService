@@ -1,6 +1,6 @@
 import requests
 import logging
-from .interface import IBuildingRepository
+from .i_building_repository import IBuildingRepository
 from ..models import Address, BuildingDetails
 from shared.enums import (
     Varmeinstallation, YdervæggensMateriale, TagdækningsMateriale,

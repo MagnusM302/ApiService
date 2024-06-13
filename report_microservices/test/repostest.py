@@ -10,7 +10,7 @@ project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
 sys.path.insert(0, project_root)
 
 from report_microservices.app_report.models.complete_house_details import CompleteHouseDetails
-from report_microservices.app_report.data.report_repository import ReportRepository
+from report_microservices.app_report.dal.report_repository import ReportRepository
 from shared.database import Database
 
 class TestReportRepository(unittest.TestCase):

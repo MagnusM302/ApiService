@@ -2,8 +2,8 @@
 
 from ..models.address import Address
 from ..models.building_details import BuildingDetails
-from ..datalag.interface import IBuildingRepository
-from .interfaces import IBuildingService
+from ..dal.i_building_repository import IBuildingRepository
+from .i_building_service import IBuildingService
 from ..dtos.address_dto import AddressDTO
 from ..dtos.building_details_dto import BuildingDetailsDTO
 from ..dtos.dto_converters import address_to_dto, building_details_to_dto

@@ -1,26 +1,48 @@
+import os
+import sys
+
+def set_sys_path():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    sys.path.append(current_dir)
+    sys.path.append(parent_dir)
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
+
+set_sys_path()
+
 from flask import Blueprint, request, jsonify
+from flask_cors import cross_origin
 from shared.auth_service import JWTService
-from shared.json_utils import JsonUtils
 from shared.config import ALLOWED_SERVICE_IDS
-from user_microservices.app_user.services import UserService
+from shared.json_utils import JsonUtils
+from user_microservices.app_user.services.i_user_service import IUserService
 
-user_blueprint = Blueprint('user', __name__)
+def create_user_blueprint(user_service: IUserService):
+    user_blueprint = Blueprint('user', __name__)
 
-def setup_routes(user_service):
+    @user_blueprint.route('/health', methods=['GET'])
+    def health_check():
+        return jsonify({'status': 'healthy'}), 200
+
     @user_blueprint.route('/system-token', methods=['POST'])
+    @cross_origin(supports_credentials=True)
     def generate_system_token():
+        print(f"Received request with method: {request.method}")
+        print(f"Request JSON: {request.json}")
         service_id = request.json.get('service_id')
         if service_id in ALLOWED_SERVICE_IDS:
             token = JWTService.generate_system_token(service_id)
             return jsonify({'system_token': token}), 200
         return jsonify({'error': 'Unauthorized service'}), 403
-
+    
     @user_blueprint.route('/protected-route')
+    @cross_origin(supports_credentials=True)
     @JWTService.token_required
     def protected_route():
         return "This is a protected area!"
 
     @user_blueprint.route('/register', methods=['POST'])
+    @cross_origin(supports_credentials=True)
     def register():
         data = request.get_json()
         user_dto = user_service.register_user(**data)
@@ -28,6 +50,7 @@ def setup_routes(user_service):
         return jsonify({'user_id': user_dto.user_id, 'token': token}), 201
 
     @user_blueprint.route('/login', methods=['POST'])
+    @cross_origin(supports_credentials=True)
     def login():
         data = request.get_json()
         username = data.get('username')
@@ -43,6 +66,7 @@ def setup_routes(user_service):
             return jsonify({'error': 'Missing key in user data: {}'.format(e)}), 500
 
     @user_blueprint.route('/users/<user_id>', methods=['GET'])
+    @cross_origin(supports_credentials=True)
     @JWTService.token_required
     def get_user(user_id):
         user_dto = user_service.get_user(user_id)
@@ -52,6 +76,7 @@ def setup_routes(user_service):
             return jsonify({'error': 'User not found'}), 404
 
     @user_blueprint.route('/users/<user_id>', methods=['PUT'])
+    @cross_origin(supports_credentials=True)
     @JWTService.token_required
     def update_user(user_id):
         data = request.get_json()
@@ -62,6 +87,7 @@ def setup_routes(user_service):
             return jsonify({'error': 'Failed to update user'}), 404
 
     @user_blueprint.route('/users/<user_id>', methods=['DELETE'])
+    @cross_origin(supports_credentials=True)
     @JWTService.token_required
     def delete_user(user_id):
         if user_service.delete_user(user_id):
@@ -69,9 +95,4 @@ def setup_routes(user_service):
         else:
             return jsonify({'error': 'Failed to delete user'}), 404
 
-
-# This function should be called to register the routes
-def register_user_routes(app):
-    user_service = UserService()  # Assuming UserService doesn't need parameters for initialization
-    setup_routes(user_service)
-    app.register_blueprint(user_blueprint)
+    return user_blueprint

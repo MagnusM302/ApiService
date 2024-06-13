@@ -1,2 +1,2 @@
-from .service import BuildingService
-from .interfaces import IBuildingService
+from .building_service import BuildingService
+from .i_building_service import IBuildingService

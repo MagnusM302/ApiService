@@ -1,4 +1,4 @@
-# enums.py
+# user.role.py
 from enum import Enum
 
 class UserRole(Enum):

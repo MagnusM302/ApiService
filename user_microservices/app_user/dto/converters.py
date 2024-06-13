@@ -1,5 +1,6 @@
-from user_microservices.app_user.models import User, UserRole
-from user_microservices.app_user.dto import UserDTO
+from user_microservices.app_user.models.user import User
+from user_microservices.app_user.models.user_role import UserRole
+from user_microservices.app_user.dto.user_dto import UserDTO
 
 
 class UserConverter:

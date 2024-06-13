@@ -1,14 +1,13 @@
-# repository.py
 from bson.objectid import ObjectId
-from shared.database import Database
-from user_microservices.app_user.enums import UserRole
+from user_microservices.app_user.models.user_role import UserRole
 from user_microservices.app_user.models import User
-from enum import Enum
+from user_microservices.app_user.dal.i_user_repository import IUserRepository
+from shared.database import Database
 
-class UserRepository:
-    def __init__(self):
-        self.collection = Database.get_collection('users')
-
+class UserRepository(IUserRepository):
+    
+    def __init__(self, db: Database):
+        self.collection = db.get_collection('users')
     def create_user(self, name, address, post_number, phone, username, email, hashed_password, role):
         """
         Create a new user in the database.

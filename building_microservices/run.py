@@ -15,8 +15,8 @@ set_sys_path()
 
 # Import service-specific modules
 from building_microservices.app_building.controllers import create_blueprint
-from building_microservices.app_building.services.service import BuildingService
-from building_microservices.app_building.datalag.dal import BuildingRepository
+from building_microservices.app_building.services.building_service import BuildingService
+from building_microservices.app_building.dal.building_repository import BuildingRepository
 from shared.custom_logging import setup_logging
 from shared.custom_dotenv import load_env_variables
 
@@ -24,8 +24,15 @@ from shared.custom_dotenv import load_env_variables
 load_env_variables()
 
 def create_building_app():
+    """Create and configure an instance of the Flask application."""
     app = Flask(__name__)
-    CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"], "allow_headers": "*"}})
+    CORS(app, supports_credentials=True, resources={
+        r"/*": {
+            "origins": "*",
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"]
+        }
+    })
     
     @app.before_request
     def log_request_info():
@@ -34,12 +41,17 @@ def create_building_app():
     
     repository = BuildingRepository()
     building_service = BuildingService(repository)
+    print("Initialized service clients and services")
+
     blueprint = create_blueprint(building_service)
     app.register_blueprint(blueprint, url_prefix='/api/buildings')
+    print("Blueprint registered")
+
     app.config['PORT'] = 5005
     return app
 
 def run_http(app):
+    print(f"Running HTTP server on port {app.config['PORT']}")
     app.run(host='0.0.0.0', port=app.config['PORT'], debug=True, use_reloader=False)
 
 def run_building_http():
@@ -48,4 +60,6 @@ def run_building_http():
 
 if __name__ == "__main__":
     setup_logging()
+    logging.info("Starting Building Service...")
+    print("Starting Building Service")
     run_building_http()

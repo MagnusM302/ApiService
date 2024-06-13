@@ -5,7 +5,7 @@ import unittest
 # Add the root directory of the project to PYTHONPATH
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 
-from building_microservices.app_building.datalag.dal import BuildingRepository
+from building_microservices.app_building.dal.building_repository import BuildingRepository
 from building_microservices.app_building.models.address import Address
 from building_microservices.app_building.models.building_details import BuildingDetails
 

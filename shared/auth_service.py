@@ -1,13 +1,17 @@
+#shared.auth_service.py
+import os
 import jwt
 from datetime import datetime, timedelta, timezone
 from flask import request, jsonify, current_app
-from user_microservices.app_user.models import UserRole
+from user_microservices.app_user.models.user_role import UserRole
 from functools import wraps
 from .config import ALLOWED_SERVICE_IDS
+from shared.custom_dotenv import load_env_variables
 
+load_env_variables()
 
 class JWTService:
-    secret_key = "your_secret_key_here"  # Statisk hemmelig nøgle for demonstration
+    secret_key = os.getenv("JWT_SECRET_KEY", "default_secret_key")
     algorithm = 'HS256'
 
     @staticmethod
