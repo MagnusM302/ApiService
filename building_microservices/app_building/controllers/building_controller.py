@@ -1,7 +1,19 @@
+import os
+import sys
+
+def set_sys_path():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    sys.path.append(current_dir)
+    sys.path.append(parent_dir)
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
+
+set_sys_path()
+
 from flask import Blueprint, jsonify, request
 from shared.json_utils import JsonUtils
 from shared.auth_service import JWTService
-from app_building.services.interfaces import IBuildingService
+from building_microservices.app_building.services.i_building_service import IBuildingService
 from enum import Enum
 import logging
 

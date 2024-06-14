@@ -1,4 +1,4 @@
-# invoice_microservices/app_invoice/data/i_invoice_respository.py
+# invoice_microservices/app_invoice/dal/i_invoice_respository.py
 from abc import ABC, abstractmethod
 from invoice_microservices.app_invoice.models.invoice import Invoice
 

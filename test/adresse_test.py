@@ -1,3 +1,5 @@
+import sys
+import os
 import unittest
 import requests
 from multiprocessing import Process
@@ -5,7 +7,9 @@ from time import sleep
 from pymongo import MongoClient
 import bcrypt
 from enum import Enum
-
+# Add the root directory of the project to PYTHONPATH
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 def run_user_service():
     from user_microservices.run import create_user_app
     app = create_user_app()

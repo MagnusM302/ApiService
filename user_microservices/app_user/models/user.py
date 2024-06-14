@@ -1,5 +1,5 @@
-# models.py
-from user_microservices.app_user.enums import UserRole
+# user.py
+from user_microservices.app_user.models.user_role import UserRole
 
 class User:
     def __init__(self, _id=None, name=None, address=None, post_number=None, phone=None, username=None, email=None, password_hash=None, role=None):

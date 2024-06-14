@@ -7,34 +7,81 @@ from time import sleep
 from enum import Enum
 
 def add_project_to_sys_path():
-    import os
-    import sys
-    root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    app_report_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'app_report'))
-    if root_path not in sys.path:
-        sys.path.append(root_path)
-    if app_report_path not in sys.path:
-        sys.path.append(app_report_path)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    sys.path.append(current_dir)
+    sys.path.append(parent_dir)
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+add_project_to_sys_path()
+
+# Import necessary modules
+from user_microservices.app_user.services.user_service import UserService
+from user_microservices.app_user.dal.user_repository import UserRepository
+from user_microservices.app_user.controller.user_controller import create_user_blueprint
+from building_microservices.app_building.services.building_service import BuildingService
+from building_microservices.app_building.dal.building_repository import BuildingRepository
+from building_microservices.app_building.controllers.building_controller import create_blueprint as create_building_blueprint
+from report_microservices.app_report.controllers.report_controller import create_report_blueprint
+from report_microservices.app_report.client.building_service_client import BuildingServiceClient
+from report_microservices.app_report.dal.report_repository import ReportRepository
+from report_microservices.app_report.services.report_services import ReportService
+from shared.database import db_instance
 
 def run_user_service():
-    add_project_to_sys_path()
-    from user_microservices.run import create_user_app
-    app = create_user_app()
-    app.run(port=5001, debug=True, use_reloader=False)
+    from flask import Flask
+    from flask_cors import CORS
+    app = Flask(__name__)
+    CORS(app, supports_credentials=True, resources={
+        r"/*": {
+            "origins": "*",
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"]
+        }
+    })
+    user_repository = UserRepository(db_instance)
+    user_service = UserService(user_repository)
+    user_blueprint = create_user_blueprint(user_service)
+    app.register_blueprint(user_blueprint, url_prefix='/api/users')
+
+    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
 
 def run_building_service():
-    add_project_to_sys_path()
-    from building_microservices.run import create_building_app
-    app = create_building_app()
-    app.run(port=5005, debug=True, use_reloader=False)
+    from flask import Flask
+    from flask_cors import CORS
+    app = Flask(__name__)
+    CORS(app, supports_credentials=True, resources={
+        r"/*": {
+            "origins": "*",
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"]
+        }
+    })
+    building_repository = BuildingRepository()
+    building_service = BuildingService(building_repository)
+    building_blueprint = create_building_blueprint(building_service)
+    app.register_blueprint(building_blueprint, url_prefix='/api/buildings')
+    app.run(host='0.0.0.0', port=5005, debug=True, use_reloader=False)
 
 def run_report_service():
-    add_project_to_sys_path()
-    from report_microservices.run import create_app
-    app = create_app()
-    app.run(port=5006, debug=True, use_reloader=False)
+    from flask import Flask
+    from flask_cors import CORS
+    app = Flask(__name__)
+    CORS(app, supports_credentials=True, resources={
+        r"/*": {
+            "origins": "*",
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"]
+        }
+    })
+    building_service_client = BuildingServiceClient(base_url="http://localhost:5005/api")
+    report_repository = ReportRepository(db_instance)
+    report_service = ReportService(building_service_client, report_repository)
+    report_blueprint = create_report_blueprint(report_service)
+    app.register_blueprint(report_blueprint, url_prefix='/api/reports')
+    app.run(host='0.0.0.0', port=5006, debug=True, use_reloader=False)
 
-USER_SERVICE_URL = "http://localhost:5001"
+USER_SERVICE_URL = "http://localhost:5000"
 BUILDING_SERVICE_URL = "http://localhost:5005"
 REPORT_SERVICE_URL = "http://localhost:5006"
 
@@ -65,7 +112,7 @@ class TestBuildingService(unittest.TestCase):
             "password": PASSWORD
         }
 
-        login_url = f"{USER_SERVICE_URL}/login"
+        login_url = f"{USER_SERVICE_URL}/api/users/login"
         login_data = {"username": USERNAME, "password": PASSWORD}
         for i in range(5):
             response = requests.post(login_url, json=login_data)

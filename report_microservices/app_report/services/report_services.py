@@ -1,5 +1,5 @@
-from .iservices import IReportService
-from ..data.i_report_repository import IReportRepository
+from .i_report_services import IReportService
+from ..dal.i_report_repository import IReportRepository
 from ..dto import CompleteHouseDetailsDTO, CustomerReportDTO
 from ..client.building_service_client import BuildingServiceClient
 from ..dto.converters import (
@@ -14,25 +14,25 @@ class ReportService(IReportService):
         self.report_repository = report_repository
 
     def generate_report(self, address: str) -> CompleteHouseDetailsDTO:
-        logging.info(f"Generating report for address: {address}")
+        print(f"Generating report for address: {address}")
         try:
             # Step 1: Autocomplete address to get address ID
             address_autocomplete_results = self.building_service_client.get_address_autocomplete(address)
             if not address_autocomplete_results:
-                logging.error("Failed to autocomplete address")
+                print("Failed to autocomplete address: No results")
                 return None
 
             # Assume the first result is the most relevant
             address_info = address_autocomplete_results.json()[0].get('data', {})
             address_id = address_info.get('id')
             if not address_id:
-                logging.error("Address ID not found in autocomplete results")
+                print("Address ID not found in autocomplete results")
                 return None
 
             # Step 2: Get detailed address information
             address_details_response = self.building_service_client.get_address_details(address_id)
             if not address_details_response:
-                logging.error("Failed to get detailed address information")
+                print("Failed to get detailed address information")
                 return None
 
             address_details = address_details_response.json()
@@ -40,12 +40,12 @@ class ReportService(IReportService):
             # Step 3: Extract building ID from address details and get building information
             building_id = address_details.get('building_id')
             if not building_id:
-                logging.error("Building ID not found in address details")
+                print("Building ID not found in address details")
                 return None
 
             building_details_response = self.building_service_client.get_building_details(building_id)
             if not building_details_response:
-                logging.error("Failed to get building details")
+                print("Failed to get building details")
                 return None
 
             building_details = building_details_response.json()
@@ -54,13 +54,13 @@ class ReportService(IReportService):
                 **building_details,
                 address=address_details
             )
-            
+
             report_model = convert_complete_house_details_dto_to_model(complete_house_details_dto)
             self.report_repository.save_report(report_model)
-            
+
             return complete_house_details_dto
         except Exception as e:
-            logging.error(f"Error generating report: {e}")
+            print(f"Error generating report: {str(e)}")
             raise
 
     def create_complete_report(self, customer_report_id: str) -> CompleteHouseDetailsDTO:

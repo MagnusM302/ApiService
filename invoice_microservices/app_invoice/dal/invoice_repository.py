@@ -1,10 +1,11 @@
 from shared.database import Database
 from bson.objectid import ObjectId
 from invoice_microservices.app_invoice.models.invoice import Invoice
-from invoice_microservices.app_invoice.data.interface import IInvoiceRepository
+from invoice_microservices.app_invoice.dal.i_invoice_repository import IInvoiceRepository
 
 class InvoiceRepository(IInvoiceRepository):
-    collection = Database.get_collection('invoices')
+    def __init__(self, db: Database):
+        self.collection = db.get_collection('invoices')
 
     @staticmethod
     def save(invoice: Invoice) -> Invoice:

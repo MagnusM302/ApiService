@@ -1,4 +1,3 @@
-from shared.database import Database
 from typing import Optional
 from ..models.complete_house_details import CompleteHouseDetails
 from bson.objectid import ObjectId
@@ -6,10 +5,13 @@ from .i_report_repository import IReportRepository
 from enum import Enum
 from ..models.customer_report import CustomerReport
 from shared.enums import Varmeinstallation, YdervæggensMateriale, TagdækningsMateriale, BygningensAnvendelse, KildeTilBygningensMaterialer, SupplerendeVarme
+from shared.database import Database
 
 class ReportRepository(IReportRepository):
-    collection = Database.get_collection('reports')
-    customer_report_collection = Database.get_collection('customer_reports')
+    def __init__(self, db: Database):
+        self.collection = db.get_collection('reports')
+        self.customer_report_collection = db.get_collection('customer_reports')
+    
 
     def save_report(self, report: CompleteHouseDetails):
         report_dict = report.model_dump()

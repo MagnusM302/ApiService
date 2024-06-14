@@ -1,33 +1,43 @@
-from flask import Blueprint, jsonify, request
+import os
+import sys
+
+def set_sys_path():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    sys.path.append(current_dir)
+    sys.path.append(parent_dir)
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
+
+set_sys_path()
+
+from flask import Blueprint, request, jsonify
+from flask_cors import cross_origin
 from shared.auth_service import JWTService
-from app_report.dto.complete_house_details_dto import CompleteHouseDetailsDTO
-from app_report.dto.customer_report_dto import CustomerReportDTO
-from app_report.services.iservices import IReportService
+from report_microservices.app_report.dto.complete_house_details_dto import CompleteHouseDetailsDTO
+from report_microservices.app_report.dto.customer_report_dto import CustomerReportDTO
+from report_microservices.app_report.services.i_report_services import IReportService
 
-def create_blueprint(report_service: IReportService):
-    blueprint = Blueprint('reports', __name__)
+def create_report_blueprint(report_service: IReportService):
+    report_blueprint = Blueprint('reports', __name__)
 
-    @blueprint.route('/generate_report', methods=['POST'])
-    @JWTService.token_required
-    @JWTService.role_required(['INSPECTOR'])
+    @report_blueprint.route('/generate_report', methods=['POST'], endpoint='generate_report')
+    @cross_origin(supports_credentials=True)
     def generate_report():
-        data = request.json
+        data = request.get_json()
         address = data.get('address')
-        
         if not address:
-            return jsonify({"error": "Address is required"}), 400
-        
+            return jsonify({'error': 'Address is required'}), 400
         try:
             report = report_service.generate_report(address)
+            if report:
+                return jsonify(report), 200
+            else:
+                return jsonify({'error': 'Failed to generate report'}), 500
         except Exception as e:
-            return jsonify({"error": str(e)}), 500
-        
-        if not report:
-            return jsonify({"error": "Report could not be generated"}), 404
-        
-        return jsonify(report.model_dump())
+            return jsonify({'error': str(e)}), 500
 
-    @blueprint.route('/get_report/<report_id>', methods=['GET'])
+    @report_blueprint.route('/get_report/<report_id>', methods=['GET'])
+    @cross_origin(supports_credentials=True)
     @JWTService.token_required
     @JWTService.role_required(['INSPECTOR'])
     def get_report(report_id):
@@ -41,7 +51,8 @@ def create_blueprint(report_service: IReportService):
         
         return jsonify(report.model_dump())
 
-    @blueprint.route('/update_report/<report_id>', methods=['PUT'])
+    @report_blueprint.route('/update_report/<report_id>', methods=['PUT'])
+    @cross_origin(supports_credentials=True)
     @JWTService.token_required
     @JWTService.role_required(['INSPECTOR'])
     def update_report(report_id):
@@ -54,7 +65,8 @@ def create_blueprint(report_service: IReportService):
         
         return jsonify({"status": "Report updated successfully"})
 
-    @blueprint.route('/delete_report/<report_id>', methods=['DELETE'])
+    @report_blueprint.route('/delete_report/<report_id>', methods=['DELETE'])
+    @cross_origin(supports_credentials=True)
     @JWTService.token_required
     @JWTService.role_required(['INSPECTOR'])
     def delete_report(report_id):
@@ -65,7 +77,8 @@ def create_blueprint(report_service: IReportService):
         
         return jsonify({"status": "Report deleted successfully"})
 
-    @blueprint.route('/submit_customer_report', methods=['POST'])
+    @report_blueprint.route('/submit_customer_report', methods=['POST'])
+    @cross_origin(supports_credentials=True)
     @JWTService.token_required
     @JWTService.role_required(['CUSTOMER'])
     def submit_customer_report():
@@ -78,7 +91,8 @@ def create_blueprint(report_service: IReportService):
         
         return jsonify({"status": "Customer report submitted successfully", "report_id": report_id})
 
-    @blueprint.route('/create_complete_report/<customer_report_id>', methods=['POST'])
+    @report_blueprint.route('/create_complete_report/<customer_report_id>', methods=['POST'])
+    @cross_origin(supports_credentials=True)
     @JWTService.token_required
     @JWTService.role_required(['INSPECTOR'])
     def create_complete_report(customer_report_id):
@@ -92,7 +106,8 @@ def create_blueprint(report_service: IReportService):
         
         return jsonify(complete_report.model_dump())
 
-    @blueprint.route('/delete_customer_report/<report_id>', methods=['DELETE'])
+    @report_blueprint.route('/delete_customer_report/<report_id>', methods=['DELETE'])
+    @cross_origin(supports_credentials=True)
     @JWTService.token_required
     @JWTService.role_required(['INSPECTOR'])
     def delete_customer_report(report_id):
@@ -103,4 +118,4 @@ def create_blueprint(report_service: IReportService):
         
         return jsonify({"status": "Customer report deleted successfully"})
 
-    return blueprint
+    return report_blueprint

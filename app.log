@@ -1,56 +1,52 @@
-2024-06-09 11:26:09,309 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5006
- * Running on http://10.0.0.6:5006
-2024-06-09 11:26:09,312 - INFO - [33mPress CTRL+C to quit[0m
-2024-06-09 11:26:09,316 - INFO -  * Restarting with stat
-2024-06-09 11:26:10,309 - WARNING -  * Debugger is active!
-2024-06-09 11:26:10,320 - INFO -  * Debugger PIN: 585-526-218
-2024-06-09 12:20:08,082 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5006
- * Running on http://10.0.0.6:5006
-2024-06-09 12:20:08,083 - INFO - [33mPress CTRL+C to quit[0m
-2024-06-09 12:20:08,087 - INFO -  * Restarting with stat
-2024-06-09 12:20:09,372 - WARNING -  * Debugger is active!
-2024-06-09 12:20:09,379 - INFO -  * Debugger PIN: 585-526-218
-2024-06-09 12:20:41,177 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5006
- * Running on http://10.0.0.6:5006
-2024-06-09 12:20:41,178 - INFO - [33mPress CTRL+C to quit[0m
-2024-06-09 12:20:41,180 - INFO -  * Restarting with stat
-2024-06-09 12:20:42,468 - WARNING -  * Debugger is active!
-2024-06-09 12:20:42,474 - INFO -  * Debugger PIN: 585-526-218
-2024-06-09 13:15:44,504 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5006
- * Running on http://10.0.0.6:5006
-2024-06-09 13:15:44,513 - INFO - [33mPress CTRL+C to quit[0m
-2024-06-09 13:15:44,527 - INFO -  * Restarting with stat
-2024-06-09 13:15:46,267 - WARNING -  * Debugger is active!
-2024-06-09 13:15:46,279 - INFO -  * Debugger PIN: 585-526-218
-2024-06-12 09:40:01,414 - INFO - Starting Report Service...
-2024-06-12 09:40:02,306 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5006
- * Running on http://10.0.0.6:5006
-2024-06-12 09:40:02,307 - INFO - [33mPress CTRL+C to quit[0m
-2024-06-12 09:40:10,911 - INFO - 127.0.0.1 - - [12/Jun/2024 09:40:10] "[33mOPTIONS /generate_report HTTP/1.1[0m" 404 -
-2024-06-12 09:40:31,430 - INFO - 127.0.0.1 - - [12/Jun/2024 09:40:31] "[33mGET /generate_report HTTP/1.1[0m" 404 -
-2024-06-12 09:40:32,648 - INFO - 127.0.0.1 - - [12/Jun/2024 09:40:32] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
-2024-06-12 09:41:45,400 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5000
- * Running on http://10.0.0.6:5000
-2024-06-12 09:41:45,401 - INFO - [33mPress CTRL+C to quit[0m
-2024-06-12 09:42:33,266 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5002
- * Running on http://10.0.0.6:5002
-2024-06-12 09:42:33,266 - INFO - [33mPress CTRL+C to quit[0m
-2024-06-12 09:42:57,030 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+2024-06-14 08:40:32,671 - INFO - Starting Building Service...
+2024-06-14 08:40:33,553 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on all addresses (0.0.0.0)
  * Running on http://127.0.0.1:5005
  * Running on http://10.0.0.6:5005
-2024-06-12 09:42:57,031 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-14 08:40:33,553 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-14 08:40:49,985 - INFO - Starting Invoice Service...
+2024-06-14 08:43:17,519 - INFO - Starting Invoice Service...
+2024-06-14 08:43:17,534 - INFO - Connected to MongoDB
+2024-06-14 08:43:18,423 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://10.0.0.6:5002
+2024-06-14 08:43:18,424 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-14 09:17:59,650 - INFO - Starting Building Service...
+2024-06-14 09:26:53,545 - INFO - Starting Invoice Service...
+2024-06-14 09:26:57,614 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000270FF0A6650>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-14 09:26:57,665 - INFO - Connected to MongoDB
+2024-06-14 09:26:58,584 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://10.0.0.6:5002
+2024-06-14 09:26:58,585 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-14 09:31:43,815 - INFO - Starting Report Service...
+2024-06-14 09:31:47,910 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000294C325E790>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-14 09:31:48,813 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5006
+ * Running on http://10.0.0.6:5006
+2024-06-14 09:31:48,813 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-14 09:33:48,390 - INFO - Starting User Service...
+2024-06-14 09:33:52,485 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E4D7A91710>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-14 09:33:52,518 - INFO - Connected to MongoDB
+2024-06-14 09:33:53,443 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.0.0.6:5000
+2024-06-14 09:33:53,444 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-14 09:35:26,363 - INFO - Starting User Service...
+2024-06-14 09:35:56,838 - INFO - Connected to MongoDB
+2024-06-14 09:35:57,737 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.0.0.6:5000
+2024-06-14 09:35:57,737 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-14 09:37:29,780 - INFO - Starting User Service...
+2024-06-14 09:37:29,813 - INFO - Connected to MongoDB
+2024-06-14 09:37:30,703 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.0.0.6:5000
+2024-06-14 09:37:30,704 - INFO - [33mPress CTRL+C to quit[0m
