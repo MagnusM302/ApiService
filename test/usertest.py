@@ -1,3 +1,5 @@
+import sys
+import os
 import subprocess
 import time
 import bcrypt
@@ -5,7 +7,9 @@ from enum import Enum
 from pymongo import MongoClient
 from shared.database import Database  # Ensure this import matches the location of your Database class
 import unittest
-
+# Add the root directory of the project to PYTHONPATH
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Define UserRole enum
 class UserRole(Enum):
     INSPECTOR = 1
@@ -35,9 +39,10 @@ class TestUserServiceIntegration(unittest.TestCase):
             "phone": "12345678",
             "username": cls.inspector_credentials['username'],
             "email": "inspector@example.com",
-            "role": UserRole.INSPECTOR.value,  # Corrected here
+            "role": UserRole.INSPECTOR.value,
             "password_hash": bcrypt.hashpw(cls.inspector_credentials['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         }
+
         # Insert the user into the database if it doesn't exist
         if cls.users_collection.find_one({"username": cls.inspector_credentials['username']}) is None:
             cls.users_collection.insert_one(cls.inspector_details)

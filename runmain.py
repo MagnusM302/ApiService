@@ -1,7 +1,8 @@
 import os
 import sys
+import logging
 import requests
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from flask_cors import CORS
 from multiprocessing import Process
 from time import sleep
@@ -10,6 +11,9 @@ from shared.database import db_instance
 from shared.custom_logging import setup_logging
 
 def set_sys_path():
+    """
+    Tilføj aktuelle og overordnede mapper til sys.path for at tillade imports fra disse mapper.
+    """
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
     sys.path.append(current_dir)
@@ -36,7 +40,11 @@ from report_microservices.app_report.client.building_service_client import Build
 from report_microservices.app_report.dal.report_repository import ReportRepository
 from report_microservices.app_report.services.report_services import ReportService
 
+# Function to create a Flask app and configure CORS
 def create_app():
+    """
+    Opretter en Flask-applikation og konfigurerer CORS.
+    """
     app = Flask(__name__)
     CORS(app, supports_credentials=True, resources={
         r"/*": {
@@ -48,12 +56,18 @@ def create_app():
 
     @app.before_request
     def log_request_info():
+        """
+        Logger forespørgselsinformation for debugging.
+        """
         if request.method == "OPTIONS":
             return _build_cors_preflight_response()
         print(f"Request path: {request.path}")
         print(f"Request headers: {request.headers}")
 
     def _build_cors_preflight_response():
+        """
+        Håndterer CORS preflight-svar.
+        """
         response = Flask.response_class()
         response.headers.add("Access-Control-Allow-Origin", "*")
         response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
@@ -87,8 +101,11 @@ invoice_service = InvoiceService(invoice_repository)
 invoice_blueprint = create_invoice_blueprint(invoice_service)
 invoice_app.register_blueprint(invoice_blueprint, url_prefix='/api/invoices')
 
-# Function to wait until the service is available
+# Function to wait until a service is available
 def wait_for_service(url, timeout=30):
+    """
+    Venter på, at en tjeneste bliver tilgængelig inden for en given timeout.
+    """
     for _ in range(timeout):
         try:
             response = requests.get(url)
@@ -98,36 +115,57 @@ def wait_for_service(url, timeout=30):
             sleep(1)
     return False
 
+# Cached system token to avoid multiple requests
+system_token = None
+
+# Function to get the cached system token or request a new one if necessary
+def get_system_token(service_id='report_service'):
+    """
+    Henter det cachede systemtoken eller anmoder om et nyt, hvis det er nødvendigt.
+    """
+    global system_token
+    if system_token is None:
+        print("Sending POST request to generate system token...")
+        try:
+            response = requests.post(
+                'http://localhost:5000/api/users/system-token', 
+                json={'service_id': service_id}
+            )
+            print(f"Response status code: {response.status_code}")
+            print(f"Response content: {response.content}")
+            if response.status_code == 200:
+                system_token = response.json()['system_token']
+            else:
+                raise ValueError("Failed to get system token")
+        except requests.exceptions.RequestException as e:
+            print(f"Request failed: {e}")
+            raise
+    return system_token
+
 # Functions to run each Flask app
 def run_user_http():
+    """
+    Kører User Service Flask-applikationen.
+    """
     user_app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
 
 def run_building_http():
+    """
+    Kører Building Service Flask-applikationen.
+    """
     building_app.run(host='0.0.0.0', port=5005, debug=True, use_reloader=False)
 
 def run_invoice_http():
+    """
+    Kører Invoice Service Flask-applikationen.
+    """
     invoice_app.run(host='0.0.0.0', port=5002, debug=True, use_reloader=False)
 
 def run_report_http():
+    """
+    Kører Report Service Flask-applikationen.
+    """
     report_app.run(host='0.0.0.0', port=5006, debug=True, use_reloader=False)
-
-# Function to request system token
-def request_system_token():
-    print("Sending POST request to generate system token...")
-    try:
-        response = requests.post(
-            'http://localhost:5000/api/users/system-token', 
-            json={'service_id': 'report_service'}
-        )
-        print(f"Response status code: {response.status_code}")
-        print(f"Response content: {response.content}")
-        if response.status_code == 200:
-            return response.json()['system_token']
-        else:
-            raise ValueError("Failed to get system token")
-    except requests.exceptions.RequestException as e:
-        print(f"Request failed: {e}")
-        raise
 
 if __name__ == '__main__':
     setup_logging()
@@ -144,27 +182,24 @@ if __name__ == '__main__':
     invoice_process.start()
     report_process.start()
 
-    # Wait until the user service is available to get the system token
-    if wait_for_service('http://localhost:5000/api/users/health'):
-        token = request_system_token()
-        building_service_client = BuildingServiceClient(base_url="http://localhost:5005/api")
-        building_service_client.set_token(token)
-        report_repository = ReportRepository(db_instance)
-        report_service = ReportService(building_service_client, report_repository)
-        report_blueprint = create_report_blueprint(report_service)
-        report_app.register_blueprint(report_blueprint, url_prefix='/api/reports')
+    # Vent på, at User Service er tilgængelig
+    user_service_url = 'http://localhost:5000/api/users/health'
+    if wait_for_service(user_service_url):
+        try:
+            # Anmod om systemtoken
+            service_id = 'user_service'
+            token = get_system_token(service_id)
 
-        # Start report app
-        report_process = Process(target=run_report_http)
-        report_process.start()
-
-        user_process.join()
-        building_process.join()
-        invoice_process.join()
-        report_process.join()
+            # Sæt token i miljøvariablerne
+            os.environ['SYSTEM_TOKEN'] = token
+            print(f"System token retrieved and set: {token}")
+        except Exception as e:
+            logging.error(f"Could not retrieve system token: {e}")
+            print(f"Could not retrieve system token: {e}")
     else:
-        print("User service is not available. Exiting...")
-        user_process.terminate()
-        building_process.terminate()
-        invoice_process.terminate()
-        report_process.terminate()
+        print("User service is not available. Continuing without system token...")
+
+    user_process.join()
+    building_process.join()
+    invoice_process.join()
+    report_process.join()
