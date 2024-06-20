@@ -50,3 +50,49 @@
  * Running on http://127.0.0.1:5000
  * Running on http://10.0.0.6:5000
 2024-06-14 09:37:30,704 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-17 16:26:30,901 - INFO - Starting User Service...
+2024-06-17 16:26:30,915 - INFO - Connected to MongoDB
+2024-06-17 16:26:31,792 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.0.0.6:5000
+2024-06-17 16:26:31,793 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-18 18:02:08,608 - INFO - Starting Report Service...
+2024-06-18 18:02:12,661 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EF9E5C6F10>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-18 18:02:13,533 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5006
+ * Running on http://10.0.0.6:5006
+2024-06-18 18:02:13,533 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-18 18:02:44,880 - INFO - Starting Report Service...
+2024-06-18 18:02:48,954 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000011C88BA2D90>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-18 18:02:49,851 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5006
+ * Running on http://10.0.0.6:5006
+2024-06-18 18:02:49,851 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-18 21:10:42,660 - INFO - Starting Report Service...
+2024-06-18 21:10:46,730 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000180A2B03810>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-18 21:10:47,629 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5006
+ * Running on http://10.0.0.6:5006
+2024-06-18 21:10:47,630 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-18 21:25:56,155 - INFO - Starting Report Service...
+2024-06-18 21:26:00,188 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000020F5BA43810>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-18 21:26:01,095 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5006
+ * Running on http://10.0.0.6:5006
+2024-06-18 21:26:01,096 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-18 21:26:20,474 - INFO - 127.0.0.1 - - [18/Jun/2024 21:26:20] "[33mGET /api/reports/health HTTP/1.1[0m" 404 -
+2024-06-18 21:31:19,731 - INFO - Starting Report Service...
+2024-06-18 21:31:23,781 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000023EC5DF76D0>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-18 21:31:24,647 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5006
+ * Running on http://10.0.0.6:5006
+2024-06-18 21:31:24,648 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-18 21:31:47,101 - INFO - 127.0.0.1 - - [18/Jun/2024 21:31:47] "[33mGET /api/reports/health%0A HTTP/1.1[0m" 404 -
+2024-06-18 21:31:52,531 - INFO - 127.0.0.1 - - [18/Jun/2024 21:31:52] "[33mGET /api/reports/health%0A HTTP/1.1[0m" 404 -
+2024-06-18 21:32:12,146 - INFO - 127.0.0.1 - - [18/Jun/2024 21:32:12] "[33mGET /api/reports/health%0A HTTP/1.1[0m" 404 -

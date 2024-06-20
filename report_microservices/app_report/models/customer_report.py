@@ -2,28 +2,26 @@ from pydantic import BaseModel
 from typing import Optional
 
 class CustomerReport(BaseModel):
-    id: Optional[str] = None  # ID genereres af databasen
+    id: Optional[str] = None
     name: str
-    phone: str  # Telefonnummer
+    phone: str
     email: str
     address: str
-
-    # Felter fra tilstandsrapporten
-    bestilling_oplysninger: Optional[str] = None  # Hvordan fandt du den bygningssagkyndige?
-    ejendomsmægler: Optional[str] = None  # Har du en ejendomsmægler?
-    ejer_år: Optional[int] = None  # Hvor mange år har du ejet ejendommen?
-    boet_periode: Optional[str] = None  # I hvilken periode har du boet på ejendommen?
-    tilbygninger: Optional[str] = None  # Har du kendskab til, at der er udført tilbygninger?
-    ombygninger: Optional[str] = None  # Har du kendskab til, at der er udført ombygninger?
-    renoveringer: Optional[str] = None  # Har du kendskab til, at der er udført større renoveringer?
-    andre_bygninger: Optional[str] = None  # Har du kendskab til, at der er opført andre bygninger?
-    tag: Optional[dict] = None  # Information om taget
-    ydermur: Optional[dict] = None  # Information om ydermur
-    indre_vægge: Optional[dict] = None  # Information om indre vægge
-    fundamenter: Optional[dict] = None  # Information om fundamenter
-    kælder: Optional[dict] = None  # Information om kælder
-    gulve: Optional[dict] = None  # Information om gulve
-    vinduer_døre: Optional[dict] = None  # Information om vinduer og døre
-    lofter_etageadskillelser: Optional[dict] = None  # Information om lofter og etageadskillelser
-    vådrum: Optional[dict] = None  # Information om vådrum
-    vvs: Optional[dict] = None  # Information om VVS
+    bestilling_oplysninger: str
+    ejendomsmægler: str
+    ejer_år: str  # Changed to str
+    boet_periode: str
+    tilbygninger: str
+    ombygninger: str
+    renoveringer: str
+    andre_bygninger: str
+    tag: str  # Changed to str
+    ydermur: str  # Changed to str
+    indre_vægge: str  # Changed to str
+    fundamenter: str  # Changed to str
+    kælder: str  # Changed to str
+    gulve: str  # Changed to str
+    vinduer_døre: str  # Changed to str
+    lofter_etageadskillelser: str  # Changed to str
+    vådrum: str  # Changed to str
+    vvs: str  # Changed to str

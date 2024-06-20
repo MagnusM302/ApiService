@@ -1,14 +1,5 @@
 import os
 import sys
-import logging
-from flask import Flask, request
-from flask_cors import CORS
-from shared.custom_dotenv import load_env_variables
-from shared.custom_logging import setup_logging
-from shared.auth_service import request_system_token
-from building_microservices.app_building.controllers.building_controller import create_building_blueprint
-from building_microservices.app_building.services.building_service import BuildingService
-from building_microservices.app_building.dal.building_repository import BuildingRepository
 
 def set_sys_path():
     """
@@ -21,6 +12,18 @@ def set_sys_path():
     sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 set_sys_path()
+
+import logging
+from flask import Flask, request
+from flask_cors import CORS
+from shared.custom_dotenv import load_env_variables
+from shared.custom_logging import setup_logging
+from shared.auth_service import request_system_token
+from building_microservices.app_building.controllers.building_controller import create_building_blueprint
+from building_microservices.app_building.services.building_service import BuildingService
+from building_microservices.app_building.dal.building_repository import BuildingRepository
+
+
 
 # Load environment variables from .env file
 load_env_variables()

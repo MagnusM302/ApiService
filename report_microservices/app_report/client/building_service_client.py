@@ -11,58 +11,62 @@ class BuildingServiceClient:
         url = f"{self.base_url}/buildings/address"
         headers = self.get_headers()
         params = {'address': address_query}
-        print(f"Sending GET request to {url} with headers {headers} and params {params}")
+        logging.info(f"Sending GET request to {url} with headers {headers} and params {params}")
         try:
             response = requests.get(url, headers=headers, params=params)
-            print(f"Response status: {response.status_code}, Response body: {response.text}")
+            logging.info(f"Response status: {response.status_code}, Response body: {response.text}")
             response.raise_for_status()
             return response
         except requests.RequestException as e:
-            print(f"Failed to autocomplete address: {e}")
+            logging.error(f"Failed to autocomplete address: {e}")
             return None
 
     def get_address_details(self, address_id: str):
         url = f"{self.base_url}/buildings/address/{address_id}"
         headers = self.get_headers()
-        print(f"Sending GET request to {url} with headers {headers}")
+        logging.info(f"Sending GET request to {url} with headers {headers}")
         try:
             response = requests.get(url, headers=headers)
-            print(f"Response status: {response.status_code}, Response body: {response.text}")
+            logging.info(f"Response status: {response.status_code}, Response body: {response.text}")
             response.raise_for_status()
             return response
         except requests.RequestException as e:
-            print(f"Failed to get address details: {e}")
+            logging.error(f"Failed to get address details: {e}")
             return None
 
     def get_building_details(self, building_id: str):
         url = f"{self.base_url}/buildings/building/{building_id}"
         headers = self.get_headers()
-        print(f"Sending GET request to {url} with headers {headers}")
+        logging.info(f"Sending GET request to {url} with headers {headers}")
         try:
             response = requests.get(url, headers=headers)
-            print(f"Response status: {response.status_code}, Response body: {response.text}")
+            logging.info(f"Response status: {response.status_code}, Response body: {response.text}")
             response.raise_for_status()
+            building_data = response.json()
+            if not building_data:
+                logging.error("No building data found")
+                raise ValueError("No building data found")
             return response
         except requests.RequestException as e:
-            print(f"Failed to get building details: {e}")
+            logging.error(f"Failed to get building details: {e}")
             return None
 
     def get_building_square_meters(self, building_id: str):
         url = f"{self.base_url}/buildings/building/{building_id}/square_meters"
         headers = self.get_headers()
-        print(f"Sending GET request to {url} with headers {headers}")
+        logging.info(f"Sending GET request to {url} with headers {headers}")
         try:
             response = requests.get(url, headers=headers)
-            print(f"Response status: {response.status_code}, Response body: {response.text}")
+            logging.info(f"Response status: {response.status_code}, Response body: {response.text}")
             response.raise_for_status()
             return response
         except requests.RequestException as e:
-            print(f"Failed to get building square meters: {e}")
+            logging.error(f"Failed to get building square meters: {e}")
             return None
 
     def get_headers(self):
         headers = {'Authorization': f'Bearer {self.token}'} if self.token else {}
-        print(f"Generated headers: {headers}")
+        logging.info(f"Generated headers: {headers}")
         return headers
 
     def set_token(self, token: str):
