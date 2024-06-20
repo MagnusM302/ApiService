@@ -53,15 +53,15 @@ def run_building_service():
     app = Flask(__name__)
     CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"], "allow_headers": ["Content-Type", "Authorization"]}})
 
-    mock_address_data = {"id": "0a3f50c8-2902-32b8-e044-0003ba298018", "status": 1, "darstatus": 3, "vejkode": "1946", "vejnavn": "Kærvej", "adresseringsvejnavn": "Kærvej", "husnr": "7", "etage": None, "dør": None, "supplerendebynavn": None, "postnr": "9800", "postnrnavn": "Hjørring", "stormodtagerpostnr": None, "stormodtagerpostnrnavn": None, "kommunekode": "0860", "adgangsadresseid": "0a3f509a-828f-32b8-e044-0003ba298018", "x": 9.9904539, "y": 57.45180085, "href": "https://api.dataforsyningen.dk/adresser/0a3f50c8-2902-32b8-e044-0003ba298018"}
+    mock_address_data = {"id": "unique-address-id", "status": 1, "darstatus": 3, "vejkode": "1946", "vejnavn": "Kærvej", "adresseringsvejnavn": "Kærvej", "husnr": "7", "etage": None, "dør": None, "supplerendebynavn": None, "postnr": "9800", "postnrnavn": "Hjørring", "stormodtagerpostnr": None, "stormodtagerpostnrnavn": None, "kommunekode": "0860", "adgangsadresseid": "0a3f509a-828f-32b8-e044-0003ba298018", "x": 9.9904539, "y": 57.45180085, "href": "https://api.dataforsyningen.dk/adresser/0a3f50c8-2902-32b8-e044-0003ba298018"}
 
-    mock_building_data = {"id": "0a3f50c8-2902-32b8-e044-0003ba298018", "building_name": "Test Building", "address_id": "0a3f509a-828f-32b8-e044-0003ba298018", "construction_year": 2000, "number_of_floors": 5}
+    mock_building_data = {"id": "unique-building-id", "building_name": "Test Building", "address_id": "0a3f509a-828f-32b8-e044-0003ba298018", "construction_year": 2000, "number_of_floors": 5}
 
     @app.route('/api/buildings/address', methods=['GET'])
     def get_address():
         address = request.args.get('address')
         if address == ADDRESS:
-            return jsonify([{"data": mock_address_data}]), 200
+            return jsonify(mock_address_data), 200
         return jsonify([]), 404
 
     @app.route('/api/buildings/building/<building_id>', methods=['GET'])

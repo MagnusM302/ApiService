@@ -48,7 +48,7 @@ class TestBuildingService(unittest.TestCase):
             "password": PASSWORD
         }
 
-        login_url = f"{USER_SERVICE_URL}/login"
+        login_url = f"{USER_SERVICE_URL}/api/users/login"
         login_data = {"username": USERNAME, "password": PASSWORD}
         for i in range(5):
             response = requests.post(login_url, json=login_data)

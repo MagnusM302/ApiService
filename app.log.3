@@ -1,0 +1,108 @@
+2024-05-11 16:00:17,170 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-11 16:00:17,171 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-11 16:00:40,321 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-11 16:00:40,322 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-11 16:18:42,313 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-11 16:18:42,314 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-11 16:22:02,753 - INFO - 127.0.0.1 - - [11/May/2024 16:22:02] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-11 16:22:02,999 - ERROR - Exception on /login [POST]
+Traceback (most recent call last):
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask_cors\extension.py", line 178, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bruger\AppData\Roaming\Python\Python311\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Bruger\source\repos\ApiService\user_microservices\app_user\controllers.py", line 41, in login
+    user_dto = user_service.login_user(username, password)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: UserService.login_user() missing 1 required positional argument: 'password'
+2024-05-11 16:22:03,009 - INFO - 127.0.0.1 - - [11/May/2024 16:22:03] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2024-05-11 16:36:40,542 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-11 16:36:40,543 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-11 16:36:40,547 - INFO -  * Restarting with stat
+2024-05-11 16:46:15,166 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-11 16:46:15,167 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-11 16:46:39,900 - INFO - 127.0.0.1 - - [11/May/2024 16:46:39] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-11 16:46:40,193 - INFO - 127.0.0.1 - - [11/May/2024 16:46:40] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2024-05-11 18:36:28,225 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-11 18:36:28,226 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-11 18:37:08,181 - INFO - 127.0.0.1 - - [11/May/2024 18:37:08] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-11 18:37:08,480 - INFO - 127.0.0.1 - - [11/May/2024 18:37:08] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2024-05-11 18:44:22,519 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-11 18:44:22,519 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-11 18:44:45,187 - INFO - 127.0.0.1 - - [11/May/2024 18:44:45] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-11 18:44:45,492 - INFO - 127.0.0.1 - - [11/May/2024 18:44:45] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2024-05-11 18:47:44,348 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-11 18:47:44,348 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-11 18:48:15,803 - INFO - 127.0.0.1 - - [11/May/2024 18:48:15] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-11 18:48:16,105 - INFO - 127.0.0.1 - - [11/May/2024 18:48:16] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2024-05-11 18:55:09,940 - INFO - 127.0.0.1 - - [11/May/2024 18:55:09] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-11 18:55:10,221 - INFO - 127.0.0.1 - - [11/May/2024 18:55:10] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2024-05-11 18:56:05,983 - INFO - 127.0.0.1 - - [11/May/2024 18:56:05] "OPTIONS /register HTTP/1.1" 200 -
+2024-05-11 18:56:06,321 - INFO - 127.0.0.1 - - [11/May/2024 18:56:06] "[35m[1mPOST /register HTTP/1.1[0m" 500 -
+2024-05-11 19:26:41,852 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-11 19:26:41,852 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-11 19:27:04,709 - INFO - 127.0.0.1 - - [11/May/2024 19:27:04] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-11 19:27:05,424 - INFO - 127.0.0.1 - - [11/May/2024 19:27:05] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2024-05-11 19:27:32,801 - INFO - 127.0.0.1 - - [11/May/2024 19:27:32] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-11 19:27:33,526 - INFO - 127.0.0.1 - - [11/May/2024 19:27:33] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2024-05-11 19:31:27,182 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-11 19:31:27,182 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-11 19:31:51,812 - INFO - 127.0.0.1 - - [11/May/2024 19:31:51] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-11 19:31:52,385 - INFO - 127.0.0.1 - - [11/May/2024 19:31:52] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2024-05-11 21:42:43,918 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-11 21:42:43,918 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-11 21:43:07,455 - INFO - 127.0.0.1 - - [11/May/2024 21:43:07] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-11 21:43:08,194 - INFO - 127.0.0.1 - - [11/May/2024 21:43:08] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2024-05-11 22:00:56,883 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-11 22:00:56,884 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-11 22:01:36,118 - INFO - 127.0.0.1 - - [11/May/2024 22:01:36] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-11 22:01:36,667 - INFO - 127.0.0.1 - - [11/May/2024 22:01:36] "POST /login HTTP/1.1" 200 -
+2024-05-13 09:15:43,623 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-13 09:15:43,624 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-13 09:16:10,471 - INFO - 127.0.0.1 - - [13/May/2024 09:16:10] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-13 09:16:41,338 - INFO - 127.0.0.1 - - [13/May/2024 09:16:41] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2024-05-13 09:17:37,357 - INFO - 127.0.0.1 - - [13/May/2024 09:17:37] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-13 09:18:08,079 - INFO - 127.0.0.1 - - [13/May/2024 09:18:08] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2024-05-13 09:20:46,737 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-13 09:20:46,738 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-13 09:21:35,114 - INFO - 127.0.0.1 - - [13/May/2024 09:21:35] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-13 09:22:05,506 - INFO - 127.0.0.1 - - [13/May/2024 09:22:05] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2024-05-13 09:58:11,505 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-13 09:58:11,506 - INFO - [33mPress CTRL+C to quit[0m
+2024-05-13 10:00:26,252 - INFO - 127.0.0.1 - - [13/May/2024 10:00:26] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-13 10:00:26,921 - INFO - 127.0.0.1 - - [13/May/2024 10:00:26] "POST /login HTTP/1.1" 200 -
+2024-05-13 10:01:19,446 - INFO - 127.0.0.1 - - [13/May/2024 10:01:19] "OPTIONS /register HTTP/1.1" 200 -
+2024-05-13 10:01:19,777 - INFO - 127.0.0.1 - - [13/May/2024 10:01:19] "[35m[1mPOST /register HTTP/1.1[0m" 500 -
+2024-05-13 10:03:36,687 - INFO - 127.0.0.1 - - [13/May/2024 10:03:36] "OPTIONS /register HTTP/1.1" 200 -
+2024-05-13 10:03:37,328 - INFO - 127.0.0.1 - - [13/May/2024 10:03:37] "[35m[1mPOST /register HTTP/1.1[0m" 201 -
+2024-05-13 10:04:05,038 - INFO - 127.0.0.1 - - [13/May/2024 10:04:05] "OPTIONS /login HTTP/1.1" 200 -
+2024-05-13 10:04:05,648 - INFO - 127.0.0.1 - - [13/May/2024 10:04:05] "POST /login HTTP/1.1" 200 -
+2024-05-13 22:49:31,923 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5003
+2024-05-13 22:49:31,931 - INFO - [33mPress CTRL+C to quit[0m
