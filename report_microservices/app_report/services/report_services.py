@@ -23,33 +23,50 @@ class ReportService(IReportService):
         self.report_repository = report_repository
 
     def fetch_building_details(self, address: str) -> CompleteHouseDetailsDTO:
-        logging.info(f"Fetching building details for address: {address}")
+        print(f"Fetching building details for address: {address}")
 
-        # Get address autocomplete results
+    # Step 1: Autocomplete address
         address_details_response = self.building_service_client.get_address_autocomplete(address)
         if not address_details_response or address_details_response.status_code != 200:
+            print(f"Failed to autocomplete address. Response: {address_details_response}")
             raise ValueError("Failed to autocomplete address: No results")
 
         address_details = address_details_response.json()
+        print(f"Autocomplete address details: {address_details}")
+
         if not address_details:
+            print("No address details found")
             raise ValueError("Failed to get address details")
 
-        # Get address ID from the first match
+        # Step 2: Fetch address details
         address_id = address_details[0]['data']['id']
-        logging.info(f"Address ID: {address_id}")
+        print(f"Address ID: {address_id}")
 
-        building_details_response = self.building_service_client.get_building_details(address_id)
+        address_full_details_response = self.building_service_client.get_address_details(address_id)
+        if not address_full_details_response or address_full_details_response.status_code != 200:
+            print(f"Failed to get address details. Response: {address_full_details_response}")
+            raise ValueError("Failed to get address details")
+
+        address_full_details = address_full_details_response.json()
+        print(f"Full address details: {address_full_details}")
+
+        building_id = address_full_details.get('building_id', address_id)
+        print(f"Building ID: {building_id}")
+
+        # Step 3: Fetch building details
+        building_details_response = self.building_service_client.get_building_details(building_id)
         if not building_details_response or building_details_response.status_code != 200:
+            print(f"Failed to get building details. Response: {building_details_response}")
             raise ValueError("Failed to get building details")
 
         building_details = building_details_response.json()
-        logging.info(f"Building details retrieved: {building_details}")
+        print(f"Building details: {building_details}")
 
-        # Create the CompleteHouseDetailsDTO
+        # Step 4: Create DTO
         complete_house_details_dto = CompleteHouseDetailsDTO(
             id="generated_id",
             address=address,
-            year_built=building_details.get('year_built', 2000),  # Default value if key not found
+            year_built=building_details.get('year_built', 2000),
             total_area=building_details.get('total_area', 100),
             number_of_buildings=building_details.get('number_of_buildings', 1),
             owner_details=OwnerDetailsDTO(
@@ -76,6 +93,7 @@ class ReportService(IReportService):
             inspector_signature="Inspector Signature"
         )
 
+        print(f"Complete house details DTO: {complete_house_details_dto}")
         return complete_house_details_dto
 
     def generate_inspector_report(self, inspector_report_data: InspectorReportDTO) -> InspectorReportDTO:

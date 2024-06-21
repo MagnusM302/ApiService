@@ -24,14 +24,16 @@ load_env_variables()
 from user_microservices.app_user.controller.user_controller import create_user_blueprint
 from user_microservices.app_user.dal.user_repository import UserRepository
 from user_microservices.app_user.services.user_service import UserService
-from building_microservices.app_building.controllers.building_controller import create_blueprint as create_building_blueprint
-from building_microservices.app_building.services.building_service import BuildingService
+from building_microservices.app_building.controllers.building_controller import create_building_blueprint
 from building_microservices.app_building.dal.building_repository import BuildingRepository
+from building_microservices.app_building.services.building_service import BuildingService
 from invoice_microservices.app_invoice.controllers.invoice_controller import create_invoice_blueprint
+from invoice_microservices.app_invoice.client.invoice_service_client import InvoiceServiceClient as InvoiceBuidlingServiceClient
 from invoice_microservices.app_invoice.dal.invoice_repository import InvoiceRepository
 from invoice_microservices.app_invoice.services.invoice_service import InvoiceService
+from invoice_microservices.app_invoice.dto.converters import InvoiceConverter
 from report_microservices.app_report.controllers.report_controller import create_report_blueprint
-from report_microservices.app_report.client.building_service_client import BuildingServiceClient
+from report_microservices.app_report.client.building_service_client import BuildingServiceClient as ReportBuildingServiceClient
 from report_microservices.app_report.dal.report_repository import ReportRepository
 from report_microservices.app_report.services.report_services import ReportService
 from shared.database import db_instance
@@ -84,15 +86,17 @@ building_blueprint = create_building_blueprint(building_service)
 building_app.register_blueprint(building_blueprint, url_prefix='/api/buildings')
 
 # Register Invoice Blueprint
+invoice_service_client = InvoiceBuidlingServiceClient(base_url="http://localhost:5005/api")
 invoice_repository = InvoiceRepository(db_instance)
-invoice_service = InvoiceService(invoice_repository)
+invoice_converter = InvoiceConverter()
+invoice_service = InvoiceService(invoice_repository, invoice_service_client, invoice_converter)
 invoice_blueprint = create_invoice_blueprint(invoice_service)
 invoice_app.register_blueprint(invoice_blueprint, url_prefix='/api/invoices')
 
 # Register Report Blueprint
-building_service_client = BuildingServiceClient(base_url="http://localhost:5005/api")
+report_building_service_client = ReportBuildingServiceClient(base_url="http://localhost:5005/api")
 report_repository = ReportRepository(db=db_instance)
-report_service = ReportService(building_service_client, report_repository)
+report_service = ReportService(report_building_service_client, report_repository)
 report_blueprint = create_report_blueprint(report_service)
 report_app.register_blueprint(report_blueprint, url_prefix='/api/reports')
 

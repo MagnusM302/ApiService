@@ -62,7 +62,22 @@ def create_building_blueprint(building_service: IBuildingService):
         except Exception as e:
             logging.error(f"Error getting building details: {e}")
             return jsonify({'error': str(e)}), 500
-    
+        
+    building_blueprint.route('/building/complete/<string:address>', methods=['GET'])
+    @JWTService.role_required(['INSPECTOR'])
+    def get_complete_building_details(address):
+        try:
+            complete_house_details_dto = building_service.get_complete_house_details(address)
+            logging.info(f"Complete House Details DTO: {complete_house_details_dto}")
+            # Convert enums before serialization
+            complete_house_details_data = enum_to_value(complete_house_details_dto.dict())
+            logging.info(f"Converted Complete House Details: {complete_house_details_data}")
+            return jsonify(complete_house_details_data), 200
+        except Exception as e:
+            logging.error(f"Error getting complete building details: {e}")
+            return jsonify({'error': str(e)}), 500
+
+        
     @building_blueprint.route('/building/<string:building_id>/square_meters', methods=['GET'])
     @JWTService.role_required(['INSPECTOR'])
     def get_building_square_meters(building_id):

@@ -17,3 +17,22 @@
  * Running on http://127.0.0.1:5005
  * Running on http://10.0.0.6:5005
 2024-06-20 09:15:22,300 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-21 09:48:36,141 - INFO - Starting Report Service...
+2024-06-21 09:48:40,292 - INFO - Starting Report Service...
+2024-06-21 09:48:44,371 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002754A683F50>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-21 09:48:45,279 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5006
+ * Running on http://10.0.0.6:5006
+2024-06-21 09:48:45,279 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-21 09:49:21,661 - INFO - Starting Invoice Service...
+2024-06-21 09:49:25,733 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000022BA0FD6DD0>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-21 09:49:25,744 - INFO - Connected to MongoDB
+2024-06-21 09:56:54,405 - INFO - Starting Invoice Service...
+2024-06-21 09:56:58,480 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001AD81DD6FD0>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-21 09:56:58,494 - INFO - Connected to MongoDB
+2024-06-21 09:56:59,397 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://10.0.0.6:5002
+2024-06-21 09:56:59,398 - INFO - [33mPress CTRL+C to quit[0m

@@ -25,6 +25,8 @@ from shared.auth_service import request_system_token  # Function to request syst
 from invoice_microservices.app_invoice.controllers.invoice_controller import create_invoice_blueprint  # Function to create the invoice blueprint
 from invoice_microservices.app_invoice.dal.invoice_repository import InvoiceRepository  # Invoice repository class
 from invoice_microservices.app_invoice.services.invoice_service import InvoiceService  # Invoice service class
+from invoice_microservices.app_invoice.client.invoice_service_client import InvoiceServiceClient  # Building service client class
+from invoice_microservices.app_invoice.dto.converters import InvoiceConverter  # Invoice converter class
 from shared.database import db_instance  # Database instance
 
 # Load environment variables using the custom function from shared
@@ -50,8 +52,10 @@ def create_invoice_app():
     db_instance.initialize()  # Ensure the database is initialized if necessary
 
     # Setup InvoiceService
+    invoice_service_client = InvoiceServiceClient(base_url="http://localhost:5005/api")
     invoice_repository = InvoiceRepository(db_instance)  # Create an instance of InvoiceRepository
-    invoice_service = InvoiceService(invoice_repository)  # Create an instance of InvoiceService
+    invoice_converter = InvoiceConverter()  # Create an instance of InvoiceConverter
+    invoice_service = InvoiceService(invoice_repository, invoice_service_client, invoice_converter)  # Create an instance of InvoiceService
 
     # Setup routes with the initialized services
     invoice_blueprint = create_invoice_blueprint(invoice_service)  # Create the invoice blueprint
