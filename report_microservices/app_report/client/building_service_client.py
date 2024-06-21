@@ -16,22 +16,22 @@ class BuildingServiceClient:
             response = requests.get(url, headers=headers, params=params)
             print(f"Response status: {response.status_code}, Response body: {response.text}")
             response.raise_for_status()
-            return response
+            return response.json()  # Return the response as JSON
         except requests.RequestException as e:
             print(f"Failed to autocomplete address: {e}")
             return None
 
-    def get_address_details(self, address_id: str):
-        url = f"{self.base_url}/buildings/address/{address_id}"
+    def get_complete_building_details(self, address):
+        url = f"{self.base_url}/buildings/address"
         headers = self.get_headers()
         print(f"Sending GET request to {url} with headers {headers}")
         try:
             response = requests.get(url, headers=headers)
             print(f"Response status: {response.status_code}, Response body: {response.text}")
             response.raise_for_status()
-            return response
+            return response.json()  # Return the response as JSON
         except requests.RequestException as e:
-            print(f"Failed to get address details: {e}")
+            print(f"Failed to get complete building details: {e}")
             return None
 
     def get_building_details(self, building_id: str):
@@ -42,7 +42,11 @@ class BuildingServiceClient:
             response = requests.get(url, headers=headers)
             print(f"Response status: {response.status_code}, Response body: {response.text}")
             response.raise_for_status()
-            return response
+            building_data = response.json()
+            if not building_data:
+                print("No building data found")
+                raise ValueError("No building data found")
+            return building_data  # Return the response as JSON
         except requests.RequestException as e:
             print(f"Failed to get building details: {e}")
             return None
@@ -55,7 +59,7 @@ class BuildingServiceClient:
             response = requests.get(url, headers=headers)
             print(f"Response status: {response.status_code}, Response body: {response.text}")
             response.raise_for_status()
-            return response
+            return response.json()  # Return the response as JSON
         except requests.RequestException as e:
             print(f"Failed to get building square meters: {e}")
             return None

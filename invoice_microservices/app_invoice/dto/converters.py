@@ -1,4 +1,4 @@
-from .invoice_dto import InvoiceDTO
+from ..dto.invoice_dto import InvoiceDTO
 from ..models.invoice import Invoice
 
 class InvoiceConverter:

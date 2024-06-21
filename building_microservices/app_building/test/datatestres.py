@@ -16,11 +16,8 @@ sys.path.append(grandparent_dir)  # Adding the grandparent directory to the syst
 sys.path.append(great_grandparent_dir)  # Adding the great grandparent directory to the system path
 
 from building_microservices.app_building.dal.building_repository import BuildingRepository
-from shared.enums import (
-    Varmeinstallation, YdervæggensMateriale, TagdækningsMateriale,
-    BygningensAnvendelse, KildeTilBygningensMaterialer, SupplerendeVarme
-)
 from building_microservices.app_building.models import Address, BuildingDetails
+from shared.enums import BygningensAnvendelse
 
 class TestBuildingRepository(unittest.TestCase):
 
@@ -35,6 +32,7 @@ class TestBuildingRepository(unittest.TestCase):
         self.assertEqual(result.vejnavn, "Kærvej")
         self.assertEqual(result.husnr, "7")
         self.assertEqual(result.postnr, "9800")
+        self.assertIsNotNone(result.id)  # Ensure the ID is present
         print(result)
 
     def test_fetch_address_details(self):
@@ -42,6 +40,9 @@ class TestBuildingRepository(unittest.TestCase):
         result = self.repository.fetch_address_details(address_id)
         self.assertIsInstance(result, Address)
         self.assertEqual(result.id, address_id)
+        self.assertEqual(result.vejnavn, "Kærvej")
+        self.assertEqual(result.husnr, "7")
+        self.assertEqual(result.postnr, "9800")
         print(result)
 
     def test_fetch_building_details(self):
@@ -49,6 +50,8 @@ class TestBuildingRepository(unittest.TestCase):
         result = self.repository.fetch_building_details(building_id)
         self.assertIsInstance(result, BuildingDetails)
         self.assertEqual(result.id, building_id)
+        self.assertEqual(result.byg007Bygningsnummer, 1)  # Assuming '1' is the expected value
+        self.assertEqual(result.byg021BygningensAnvendelse.value, '120')  # Correct comparison
         print(result)
 
 if __name__ == '__main__':

@@ -1,52 +1,38 @@
-2024-06-14 08:40:32,671 - INFO - Starting Building Service...
-2024-06-14 08:40:33,553 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5005
- * Running on http://10.0.0.6:5005
-2024-06-14 08:40:33,553 - INFO - [33mPress CTRL+C to quit[0m
-2024-06-14 08:40:49,985 - INFO - Starting Invoice Service...
-2024-06-14 08:43:17,519 - INFO - Starting Invoice Service...
-2024-06-14 08:43:17,534 - INFO - Connected to MongoDB
-2024-06-14 08:43:18,423 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5002
- * Running on http://10.0.0.6:5002
-2024-06-14 08:43:18,424 - INFO - [33mPress CTRL+C to quit[0m
-2024-06-14 09:17:59,650 - INFO - Starting Building Service...
-2024-06-14 09:26:53,545 - INFO - Starting Invoice Service...
-2024-06-14 09:26:57,614 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000270FF0A6650>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
-2024-06-14 09:26:57,665 - INFO - Connected to MongoDB
-2024-06-14 09:26:58,584 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5002
- * Running on http://10.0.0.6:5002
-2024-06-14 09:26:58,585 - INFO - [33mPress CTRL+C to quit[0m
-2024-06-14 09:31:43,815 - INFO - Starting Report Service...
-2024-06-14 09:31:47,910 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000294C325E790>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
-2024-06-14 09:31:48,813 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+2024-06-20 09:07:19,412 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on all addresses (0.0.0.0)
  * Running on http://127.0.0.1:5006
  * Running on http://10.0.0.6:5006
-2024-06-14 09:31:48,813 - INFO - [33mPress CTRL+C to quit[0m
-2024-06-14 09:33:48,390 - INFO - Starting User Service...
-2024-06-14 09:33:52,485 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E4D7A91710>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
-2024-06-14 09:33:52,518 - INFO - Connected to MongoDB
-2024-06-14 09:33:53,443 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+2024-06-20 09:07:19,416 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-20 09:12:30,947 - INFO - Starting Report Service...
+2024-06-20 09:12:35,021 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000022CC14D8790>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-20 09:12:35,919 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5000
- * Running on http://10.0.0.6:5000
-2024-06-14 09:33:53,444 - INFO - [33mPress CTRL+C to quit[0m
-2024-06-14 09:35:26,363 - INFO - Starting User Service...
-2024-06-14 09:35:56,838 - INFO - Connected to MongoDB
-2024-06-14 09:35:57,737 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5006
+ * Running on http://10.0.0.6:5006
+2024-06-20 09:12:35,920 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-20 09:15:17,305 - INFO - Starting Building Service...
+2024-06-20 09:15:21,406 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002618BB05490>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-20 09:15:22,300 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5000
- * Running on http://10.0.0.6:5000
-2024-06-14 09:35:57,737 - INFO - [33mPress CTRL+C to quit[0m
-2024-06-14 09:37:29,780 - INFO - Starting User Service...
-2024-06-14 09:37:29,813 - INFO - Connected to MongoDB
-2024-06-14 09:37:30,703 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5005
+ * Running on http://10.0.0.6:5005
+2024-06-20 09:15:22,300 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-21 09:48:36,141 - INFO - Starting Report Service...
+2024-06-21 09:48:40,292 - INFO - Starting Report Service...
+2024-06-21 09:48:44,371 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002754A683F50>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-21 09:48:45,279 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5000
- * Running on http://10.0.0.6:5000
-2024-06-14 09:37:30,704 - INFO - [33mPress CTRL+C to quit[0m
+ * Running on http://127.0.0.1:5006
+ * Running on http://10.0.0.6:5006
+2024-06-21 09:48:45,279 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-21 09:49:21,661 - INFO - Starting Invoice Service...
+2024-06-21 09:49:25,733 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000022BA0FD6DD0>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-21 09:49:25,744 - INFO - Connected to MongoDB
+2024-06-21 09:56:54,405 - INFO - Starting Invoice Service...
+2024-06-21 09:56:58,480 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001AD81DD6FD0>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-21 09:56:58,494 - INFO - Connected to MongoDB
+2024-06-21 09:56:59,397 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://10.0.0.6:5002
+2024-06-21 09:56:59,398 - INFO - [33mPress CTRL+C to quit[0m

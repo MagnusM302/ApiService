@@ -1,3 +1,3 @@
-from .building_controller import create_blueprint
+from .building_controller import create_building_blueprint
 
-__all__ = ['create_blueprint']
+__all__ = ['create_building_blueprint']

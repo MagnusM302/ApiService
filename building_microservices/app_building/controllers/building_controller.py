@@ -17,12 +17,15 @@ from building_microservices.app_building.services.i_building_service import IBui
 from enum import Enum
 import logging
 
-def create_blueprint(building_service: IBuildingService):
-    blueprint = Blueprint('app', __name__)
+def create_building_blueprint(building_service: IBuildingService):
+    building_blueprint = Blueprint('building', __name__)
+    
+    @building_blueprint.route('/health', methods=['GET'])
+    def health():
+        return jsonify({"status": "healthy"}), 200
 
-    @blueprint.route('/address', methods=['GET'])
-    @JWTService.token_required
-    @JWTService.role_required(['INSPECTOR'])
+    @building_blueprint.route('/address', methods=['GET'])
+    
     def get_address():
         address = request.args.get('address')
         if not address:
@@ -35,8 +38,7 @@ def create_blueprint(building_service: IBuildingService):
             logging.error(f"Error getting address: {e}")
             return jsonify({'error': str(e)}), 500
 
-    @blueprint.route('/address/<string:address_id>', methods=['GET'])
-    @JWTService.token_required
+    @building_blueprint.route('/address/<string:address_id>', methods=['GET'])
     @JWTService.role_required(['INSPECTOR'])
     def get_address_details(address_id):
         try:
@@ -47,8 +49,7 @@ def create_blueprint(building_service: IBuildingService):
             logging.error(f"Error getting address details: {e}")
             return jsonify({'error': str(e)}), 500
 
-    @blueprint.route('/building/<string:building_id>', methods=['GET'])
-    @JWTService.token_required
+    @building_blueprint.route('/building/<string:building_id>', methods=['GET'])
     @JWTService.role_required(['INSPECTOR'])
     def get_building_details(building_id):
         try:
@@ -61,9 +62,23 @@ def create_blueprint(building_service: IBuildingService):
         except Exception as e:
             logging.error(f"Error getting building details: {e}")
             return jsonify({'error': str(e)}), 500
-    
-    @blueprint.route('/building/<string:building_id>/square_meters', methods=['GET'])
-    @JWTService.token_required
+        
+    building_blueprint.route('/building/complete/<string:address>', methods=['GET'])
+    @JWTService.role_required(['INSPECTOR'])
+    def get_complete_building_details(address):
+        try:
+            complete_house_details_dto = building_service.get_complete_house_details(address)
+            logging.info(f"Complete House Details DTO: {complete_house_details_dto}")
+            # Convert enums before serialization
+            complete_house_details_data = enum_to_value(complete_house_details_dto.dict())
+            logging.info(f"Converted Complete House Details: {complete_house_details_data}")
+            return jsonify(complete_house_details_data), 200
+        except Exception as e:
+            logging.error(f"Error getting complete building details: {e}")
+            return jsonify({'error': str(e)}), 500
+
+        
+    @building_blueprint.route('/building/<string:building_id>/square_meters', methods=['GET'])
     @JWTService.role_required(['INSPECTOR'])
     def get_building_square_meters(building_id):
         try:
@@ -80,7 +95,7 @@ def create_blueprint(building_service: IBuildingService):
             logging.error(f"Error getting building square meters: {e}")
             return jsonify({'error': str(e)}), 500
         
-    return blueprint
+    return building_blueprint
 
 def enum_to_value(data):
     if isinstance(data, dict):

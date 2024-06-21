@@ -1,19 +1,13 @@
 import os
 import sys
 import logging
-import requests
 from flask import Flask, request
 from flask_cors import CORS
 from multiprocessing import Process
 from time import sleep
-from shared.custom_dotenv import load_env_variables
-from shared.database import db_instance
-from shared.custom_logging import setup_logging
+import requests
 
 def set_sys_path():
-    """
-    Tilføj aktuelle og overordnede mapper til sys.path for at tillade imports fra disse mapper.
-    """
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
     sys.path.append(current_dir)
@@ -23,28 +17,30 @@ def set_sys_path():
 set_sys_path()
 
 # Load environment variables early
+from shared.custom_dotenv import load_env_variables
 load_env_variables()
 
 # Import necessary modules
 from user_microservices.app_user.controller.user_controller import create_user_blueprint
 from user_microservices.app_user.dal.user_repository import UserRepository
 from user_microservices.app_user.services.user_service import UserService
-from building_microservices.app_building.controllers.building_controller import create_blueprint as create_building_blueprint
-from building_microservices.app_building.services.building_service import BuildingService
+from building_microservices.app_building.controllers.building_controller import create_building_blueprint
 from building_microservices.app_building.dal.building_repository import BuildingRepository
+from building_microservices.app_building.services.building_service import BuildingService
 from invoice_microservices.app_invoice.controllers.invoice_controller import create_invoice_blueprint
+from invoice_microservices.app_invoice.client.invoice_service_client import InvoiceServiceClient as InvoiceBuidlingServiceClient
 from invoice_microservices.app_invoice.dal.invoice_repository import InvoiceRepository
 from invoice_microservices.app_invoice.services.invoice_service import InvoiceService
+from invoice_microservices.app_invoice.dto.converters import InvoiceConverter
 from report_microservices.app_report.controllers.report_controller import create_report_blueprint
-from report_microservices.app_report.client.building_service_client import BuildingServiceClient
+from report_microservices.app_report.client.building_service_client import BuildingServiceClient as ReportBuildingServiceClient
 from report_microservices.app_report.dal.report_repository import ReportRepository
 from report_microservices.app_report.services.report_services import ReportService
+from shared.database import db_instance
+from shared.custom_logging import setup_logging
 
 # Function to create a Flask app and configure CORS
 def create_app():
-    """
-    Opretter en Flask-applikation og konfigurerer CORS.
-    """
     app = Flask(__name__)
     CORS(app, supports_credentials=True, resources={
         r"/*": {
@@ -56,18 +52,12 @@ def create_app():
 
     @app.before_request
     def log_request_info():
-        """
-        Logger forespørgselsinformation for debugging.
-        """
         if request.method == "OPTIONS":
             return _build_cors_preflight_response()
         print(f"Request path: {request.path}")
         print(f"Request headers: {request.headers}")
 
     def _build_cors_preflight_response():
-        """
-        Håndterer CORS preflight-svar.
-        """
         response = Flask.response_class()
         response.headers.add("Access-Control-Allow-Origin", "*")
         response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
@@ -96,16 +86,22 @@ building_blueprint = create_building_blueprint(building_service)
 building_app.register_blueprint(building_blueprint, url_prefix='/api/buildings')
 
 # Register Invoice Blueprint
+invoice_service_client = InvoiceBuidlingServiceClient(base_url="http://localhost:5005/api")
 invoice_repository = InvoiceRepository(db_instance)
-invoice_service = InvoiceService(invoice_repository)
+invoice_converter = InvoiceConverter()
+invoice_service = InvoiceService(invoice_repository, invoice_service_client, invoice_converter)
 invoice_blueprint = create_invoice_blueprint(invoice_service)
 invoice_app.register_blueprint(invoice_blueprint, url_prefix='/api/invoices')
 
+# Register Report Blueprint
+report_building_service_client = ReportBuildingServiceClient(base_url="http://localhost:5005/api")
+report_repository = ReportRepository(db=db_instance)
+report_service = ReportService(report_building_service_client, report_repository)
+report_blueprint = create_report_blueprint(report_service)
+report_app.register_blueprint(report_blueprint, url_prefix='/api/reports')
+
 # Function to wait until a service is available
 def wait_for_service(url, timeout=30):
-    """
-    Venter på, at en tjeneste bliver tilgængelig inden for en given timeout.
-    """
     for _ in range(timeout):
         try:
             response = requests.get(url)
@@ -120,9 +116,6 @@ system_token = None
 
 # Function to get the cached system token or request a new one if necessary
 def get_system_token(service_id='report_service'):
-    """
-    Henter det cachede systemtoken eller anmoder om et nyt, hvis det er nødvendigt.
-    """
     global system_token
     if system_token is None:
         print("Sending POST request to generate system token...")
@@ -144,27 +137,15 @@ def get_system_token(service_id='report_service'):
 
 # Functions to run each Flask app
 def run_user_http():
-    """
-    Kører User Service Flask-applikationen.
-    """
     user_app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
 
 def run_building_http():
-    """
-    Kører Building Service Flask-applikationen.
-    """
     building_app.run(host='0.0.0.0', port=5005, debug=True, use_reloader=False)
 
 def run_invoice_http():
-    """
-    Kører Invoice Service Flask-applikationen.
-    """
     invoice_app.run(host='0.0.0.0', port=5002, debug=True, use_reloader=False)
 
 def run_report_http():
-    """
-    Kører Report Service Flask-applikationen.
-    """
     report_app.run(host='0.0.0.0', port=5006, debug=True, use_reloader=False)
 
 if __name__ == '__main__':

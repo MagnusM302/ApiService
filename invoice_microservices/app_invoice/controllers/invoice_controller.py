@@ -20,6 +20,10 @@ from shared.exceptions import ResourceNotFound
 
 def create_invoice_blueprint(invoice_service: IInvoiceService):
     invoice_blueprint = Blueprint('invoice', __name__)
+    
+    @invoice_blueprint.route('/health', methods=['GET'])
+    def health():
+        return jsonify({"status": "healthy"}), 200
 
     @invoice_blueprint.route('/create_invoice', methods=['POST'])
     @cross_origin(supports_credentials=True)
