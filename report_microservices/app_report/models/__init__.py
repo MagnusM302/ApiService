@@ -1,4 +1,4 @@
-from .adresse import Address
+from .address import Address
 from .building_component import BuildingComponent
 from .complete_house_details import CompleteHouseDetails
 from .customer_report import CustomerReport

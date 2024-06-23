@@ -1,5 +1,5 @@
 # app_report/dto/__init__.py
-from .adresse_dto import AddressDTO
+from .address_dto import AddressDTO
 from .building_component_dto import BuildingComponentDTO
 from .complete_house_details_dto import CompleteHouseDetailsDTO
 from .damage_details_dto import DamageDetailsDTO

@@ -1,11 +1,11 @@
 import logging
-
+from .address_dto import AddressDTO
 from .complete_house_details_dto import CompleteHouseDetailsDTO
 from .owner_details_dto import OwnerDetailsDTO
 from .damage_details_dto import DamageDetailsDTO
 from .hustype_dto import HustypeDTO
 from .building_component_dto import BuildingComponentDTO
-
+from ..models.address import Address
 from ..models.complete_house_details import CompleteHouseDetails
 from ..models.owner_details import OwnerDetails
 from ..models.hustype import Hustype
@@ -17,6 +17,27 @@ from ..models.inspector_report import InspectorReport
 from .inspector_report_dto import InspectorReportDTO
 
 logging.basicConfig(level=logging.DEBUG)
+
+def convert_address_dto_to_model(dto: AddressDTO) -> Address:
+    return Address(
+        vejnavn=dto.vejnavn,
+        husnr=dto.husnr,
+        postnr = dto.postnr,
+        postnrnavn = dto.postnrnavn,
+        tekst = dto.tekst,
+        adgangsadresseid = dto.adgangsadresseid
+    )
+
+def convert_address_to_dto_model(model: Address) -> AddressDTO:
+    return AddressDTO(
+        vejnavn=model.vejnavn,
+        husnr=model.husnr,
+        postnr = model.postnr,
+        postnrnavn = model.postnrnavn,
+        teskst = model.teskst,
+        adgangsadresseid= model.adgangsadresseid
+    )           
+        
 
 def convert_damage_details_dto_to_model(dto: DamageDetailsDTO) -> DamageDetails:
     return DamageDetails(
@@ -83,20 +104,13 @@ def convert_complete_house_details_dto_to_model(dto: CompleteHouseDetailsDTO) ->
         year_built=str(dto.year_built),
         total_area=dto.total_area,
         number_of_buildings=dto.number_of_buildings,
-        owner_details=convert_owner_details_dto_to_model(dto.owner_details),
-        hustype=convert_hustype_dto_to_model(dto.hustype),
-        basement_present=dto.basement_present,
-        building_components=[convert_building_component_dto_to_model(comp) for comp in dto.building_components],
         varmeinstallation=dto.varmeinstallation,
         ydervaegsmateriale=dto.ydervaegsmateriale,
         tagdaekningsmateriale=dto.tagdaekningsmateriale,
         bygningens_anvendelse=dto.bygningens_anvendelse,
         kilde_til_bygningens_materialer=dto.kilde_til_bygningens_materialer,
-        supplerende_varme=dto.supplerende_varme,
-        remarks=dto.remarks,
-        inspection_date=dto.inspection_date,
-        inspector_name=dto.inspector_name,
-        inspector_signature=dto.inspector_signature
+        supplerende_varme=dto.supplerende_varme
+        
     )
 
 def convert_complete_house_details_to_dto(model: CompleteHouseDetails) -> CompleteHouseDetailsDTO:
@@ -106,20 +120,13 @@ def convert_complete_house_details_to_dto(model: CompleteHouseDetails) -> Comple
         year_built=str(model.year_built),
         total_area=model.total_area,
         number_of_buildings=model.number_of_buildings,
-        owner_details=convert_owner_details_to_dto(model.owner_details),
-        hustype=convert_hustype_to_dto(model.hustype),
-        basement_present=model.basement_present,
-        building_components=[convert_building_component_to_dto(comp) for comp in model.building_components],
         varmeinstallation=model.varmeinstallation,
         ydervaegsmateriale=model.ydervaegsmateriale,
         tagdaekningsmateriale=model.tagdaekningsmateriale,
         bygningens_anvendelse=model.bygningens_anvendelse,
         kilde_til_bygningens_materialer=model.kilde_til_bygningens_materialer,
-        supplerende_varme=model.supplerende_varme,
-        remarks=model.remarks,
-        inspection_date=model.inspection_date,
-        inspector_name=model.inspector_name,
-        inspector_signature=model.inspector_signature
+        supplerende_varme=model.supplerende_varme
+        
     )
 
 def convert_inspector_report_dto_to_model(dto: InspectorReportDTO) -> InspectorReport:

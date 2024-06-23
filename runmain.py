@@ -86,7 +86,7 @@ building_blueprint = create_building_blueprint(building_service)
 building_app.register_blueprint(building_blueprint, url_prefix='/api/buildings')
 
 # Register Invoice Blueprint
-invoice_service_client = InvoiceBuidlingServiceClient(base_url="http://localhost:5005/api")
+invoice_service_client = InvoiceBuidlingServiceClient(base_url="http://localhost:5005/api/buildings")
 invoice_repository = InvoiceRepository(db_instance)
 invoice_converter = InvoiceConverter()
 invoice_service = InvoiceService(invoice_repository, invoice_service_client, invoice_converter)
@@ -94,7 +94,7 @@ invoice_blueprint = create_invoice_blueprint(invoice_service)
 invoice_app.register_blueprint(invoice_blueprint, url_prefix='/api/invoices')
 
 # Register Report Blueprint
-report_building_service_client = ReportBuildingServiceClient(base_url="http://localhost:5005/api")
+report_building_service_client = ReportBuildingServiceClient(base_url="http://localhost:5005/api/buildings")
 report_repository = ReportRepository(db=db_instance)
 report_service = ReportService(report_building_service_client, report_repository)
 report_blueprint = create_report_blueprint(report_service)

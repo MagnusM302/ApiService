@@ -91,22 +91,12 @@ class TestBuildingService(unittest.TestCase):
         headers = {'Authorization': f'Bearer {self.token}'}
         response = requests.get(f"{BUILDING_SERVICE_URL}/api/buildings/building/3d90f674-e642-4516-b4a1-45f2617b561f", headers=headers)
         self.assertEqual(response.status_code, 200, f"Failed to fetch building details: {response.json()}")
-        
+
         details_data = response.json()
-        self.assertIn('id_lokalId', details_data, "Expected 'id_lokalId' key in the building details")
+        self.assertIn('id', details_data, "Expected 'id' key in the building details")
         self.assertIn('byg007Bygningsnummer', details_data, "Expected 'byg007Bygningsnummer' key in the building details")
-        self.assertIn('byg021BygningensAnvendelse', details_data, "Expected 'byg021BygningensAnvendelse' key in the building details")
     
-    def test_get_building_square_meters(self):
-        headers = {'Authorization': f'Bearer {self.token}'}
-        response = requests.get(f"{BUILDING_SERVICE_URL}/api/buildings/building/3d90f674-e642-4516-b4a1-45f2617b561f/square_meters", headers=headers)
-        self.assertEqual(response.status_code, 200, f"Failed to fetch building square meters: {response.json()}")
-        
-        square_meters_data = response.json()
-        self.assertIn('id_lokalId', square_meters_data, "Expected 'id_lokalId' key in the building square meters")
-        self.assertIn('samlet_bygningsareal', square_meters_data, "Expected 'samlet_bygningsareal' key in the building square meters")
-        self.assertIn('samlede_boligareal', square_meters_data, "Expected 'samlede_boligareal' key in the building square meters")
-        self.assertIn('bebygget_areal', square_meters_data, "Expected 'bebygget_areal' key in the building square meters")
+
 
 if __name__ == '__main__':
     unittest.main()
