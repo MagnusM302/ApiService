@@ -36,3 +36,11 @@
  * Running on http://127.0.0.1:5002
  * Running on http://10.0.0.6:5002
 2024-06-21 09:56:59,398 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-22 23:23:29,356 - INFO - Starting Building Service...
+2024-06-22 23:23:33,419 - ERROR - Could not retrieve system token: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/users/system-token (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002078C444F90>: Failed to establish a new connection: [WinError 10061] Der kunne ikke oprettes forbindelse, fordi destinationscomputeren aktivt nægtede det'))
+2024-06-22 23:23:33,478 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5005
+ * Running on http://10.0.0.6:5005
+2024-06-22 23:23:33,479 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-22 23:24:49,924 - INFO - 127.0.0.1 - - [22/Jun/2024 23:24:49] "GET /api/buildings/health HTTP/1.1" 200 -

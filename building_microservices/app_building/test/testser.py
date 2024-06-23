@@ -45,7 +45,7 @@ class TestBuildingService(unittest.TestCase):
         building_details_dto = self.service.get_building_details(building_id)
 
         self.assertIsInstance(building_details_dto, BuildingDetailsDTO)
-        self.assertEqual(building_details_dto.id_lokalId, building_id)
+        self.assertEqual(building_details_dto.id, building_id)
         self.assertEqual(building_details_dto.byg007Bygningsnummer, 1)
         self.assertEqual(building_details_dto.byg021BygningensAnvendelse, "120")
         self.assertEqual(building_details_dto.byg026Opførelsesår, 1952)

@@ -4,19 +4,22 @@ from typing import Optional
 
 class AddressDTO(BaseModel):
     id: str
-    vejkode: str
+    status: Optional[int]
+    darstatus: Optional[int]
+    vejkode: Optional[str]
     vejnavn: str
-    adresseringsvejnavn: str
-    husnr: str
+    adresseringsvejnavn: Optional[str]
+    husnr: Optional[str]
+    etage: Optional[str] = None
+    dør: Optional[str] = None
+    supplerendebynavn: Optional[str] = None
     postnr: str
     postnrnavn: str
-    kommunekode: str
-    adgangsadresseid: str
-    tekst: Optional[str] = None
-    x: float
-    y: float
-    href: str
-    status: int
-    darstatus: int
     stormodtagerpostnr: Optional[bool] = False
-
+    stormodtagerpostnrnavn: Optional[str] = None
+    kommunekode: Optional[str]
+    adgangsadresseid: str
+    x: Optional[float]
+    y: Optional[float]
+    href: Optional[str]
+    tekst: Optional[str] = ""

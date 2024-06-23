@@ -45,7 +45,7 @@ def dto_to_address(dto: AddressDTO) -> Address:
 
 def building_details_to_dto(details: BuildingDetails) -> BuildingDetailsDTO:
     return BuildingDetailsDTO(
-        id_lokalId=details.id,
+        id=details.id,
         byg007Bygningsnummer=details.byg007Bygningsnummer,
         byg021BygningensAnvendelse=details.byg021BygningensAnvendelse,
         byg026Opførelsesår=details.byg026Opførelsesår,
@@ -84,7 +84,8 @@ def building_details_to_dto(details: BuildingDetails) -> BuildingDetailsDTO:
 
 def dto_to_building_details(dto: BuildingDetailsDTO) -> BuildingDetails:
     return BuildingDetails(
-        id=dto.id_lokalId,
+        id=dto.id,
+        address=dto_to_address(dto.address),
         byg007Bygningsnummer=dto.byg007Bygningsnummer,
         byg021BygningensAnvendelse=dto.byg021BygningensAnvendelse,
         byg026Opførelsesår=dto.byg026Opførelsesår,

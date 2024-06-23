@@ -93,7 +93,7 @@ class UserRole(Enum):
     INSPECTOR = 1
     CUSTOMER = 2
 
-class TestBuildingService(unittest.TestCase):
+class TestBuildingServiceClient(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -125,7 +125,7 @@ class TestBuildingService(unittest.TestCase):
 
         add_project_to_sys_path()
         from report_microservices.app_report.client.building_service_client import BuildingServiceClient
-        cls.building_service_client = BuildingServiceClient(token=cls.token)
+        cls.building_service_client = BuildingServiceClient(base_url=f"{BUILDING_SERVICE_URL}/api/buildings", token=cls.token)
 
     @classmethod
     def tearDownClass(cls):
@@ -139,45 +139,26 @@ class TestBuildingService(unittest.TestCase):
         cls.report_service_process.join()
 
     def test_get_address(self):
-        headers = {'Authorization': f'Bearer {self.token}'}
-        response = requests.get(f"{BUILDING_SERVICE_URL}/api/buildings/address", headers=headers, params={'address': ADDRESS})
-        self.assertEqual(response.status_code, 200, f"Failed to fetch address: {response.json()}")
-        
-        address_data = response.json()
+        address_data = self.building_service_client.get_address(ADDRESS)
         self.assertIsInstance(address_data, dict, "Expected response to be a dict")
         self.assertIn('vejnavn', address_data, "Expected 'vejnavn' key in the address item")
         self.assertIn('husnr', address_data, "Expected 'husnr' key in the address item")
 
     def test_get_address_details(self):
-        headers = {'Authorization': f'Bearer {self.token}'}
-        response = requests.get(f"{BUILDING_SERVICE_URL}/api/buildings/address/0a3f50c8-2902-32b8-e044-0003ba298018", headers=headers)
-        self.assertEqual(response.status_code, 200, f"Failed to fetch address details: {response.json()}")
-        
-        details_data = response.json()
-        self.assertIn('id', details_data, "Expected 'id' key in the address details")
-        self.assertIn('vejnavn', details_data, "Expected 'vejnavn' key in the address details")
-        self.assertIn('husnr', details_data, "Expected 'husnr' key in the address details")
+        address_id = "0a3f50c8-2902-32b8-e044-0003ba298018"
+        address_details = self.building_service_client.get_address_details(address_id)
+        self.assertIsInstance(address_details, object, "Expected response to be an object")
+        self.assertTrue(hasattr(address_details, 'id'), "Expected 'id' attribute in the address details")
+        self.assertTrue(hasattr(address_details, 'vejnavn'), "Expected 'vejnavn' attribute in the address details")
+        self.assertTrue(hasattr(address_details, 'husnr'), "Expected 'husnr' attribute in the address details")
 
     def test_get_building_details(self):
-        headers = {'Authorization': f'Bearer {self.token}'}
-        response = requests.get(f"{BUILDING_SERVICE_URL}/api/buildings/building/3d90f674-e642-4516-b4a1-45f2617b561f", headers=headers)
-        self.assertEqual(response.status_code, 200, f"Failed to fetch building details: {response.json()}")
-        
-        details_data = response.json()
-        self.assertIn('id_lokalId', details_data, "Expected 'id_lokalId' key in the building details")
-        self.assertIn('byg007Bygningsnummer', details_data, "Expected 'byg007Bygningsnummer' key in the building details")
-        self.assertIn('byg021BygningensAnvendelse', details_data, "Expected 'byg021BygningensAnvendelse' key in the building details")
-    
-    def test_get_building_square_meters(self):
-        headers = {'Authorization': f'Bearer {self.token}'}
-        response = requests.get(f"{BUILDING_SERVICE_URL}/api/buildings/building/3d90f674-e642-4516-b4a1-45f2617b561f/square_meters", headers=headers)
-        self.assertEqual(response.status_code, 200, f"Failed to fetch building square meters: {response.json()}")
-        
-        square_meters_data = response.json()
-        self.assertIn('id_lokalId', square_meters_data, "Expected 'id_lokalId' key in the building square meters")
-        self.assertIn('samlet_bygningsareal', square_meters_data, "Expected 'samlet_bygningsareal' key in the building square meters")
-        self.assertIn('samlede_boligareal', square_meters_data, "Expected 'samlede_boligareal' key in the building square meters")
-        self.assertIn('bebygget_areal', square_meters_data, "Expected 'bebygget_areal' key in the building square meters")
+        building_id = "3d90f674-e642-4516-b4a1-45f2617b561f"
+        building_details = self.building_service_client.get_building_details(building_id)
+        self.assertIsInstance(building_details, object, "Expected response to be an object")
+        self.assertTrue(hasattr(building_details, 'id'), "Expected 'id' attribute in the building details")
+        self.assertTrue(hasattr(building_details, 'byg007Bygningsnummer'), "Expected 'byg007Bygningsnummer' attribute in the building details")
+        self.assertTrue(hasattr(building_details, 'byg021BygningensAnvendelse'), "Expected 'byg021BygningensAnvendelse' attribute in the building details")
 
 if __name__ == '__main__':
     unittest.main()

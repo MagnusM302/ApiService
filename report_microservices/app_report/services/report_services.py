@@ -1,13 +1,24 @@
-import logging
+import os
+import sys
+def set_sys_path():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    sys.path.append(current_dir)
+    sys.path.append(parent_dir)
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
 
-from .i_report_services import IReportService
+set_sys_path()
+
+import logging
+from shared.enums import Varmeinstallation, YdervæggensMateriale, TagdækningsMateriale, BygningensAnvendelse, KildeTilBygningensMaterialer, SupplerendeVarme
+from services.i_report_services import IReportService
 from ..dal.i_report_repository import IReportRepository
 from ..dto.complete_house_details_dto import CompleteHouseDetailsDTO
+
 from ..dto.customer_report_dto import CustomerReportDTO
-from ..dto.hustype_dto import HustypeDTO
-from ..dto.owner_details_dto import OwnerDetailsDTO
 from ..dto.inspector_report_dto import InspectorReportDTO
-from ..models.customer_report import CustomerReport
+from building_microservices.app_building.dtos.building_details_dto import BuildingDetailsDTO
+from building_microservices.app_building.dtos.address_dto import AddressDTO
 from ..client.building_service_client import BuildingServiceClient
 from ..dto.converters import (
     convert_complete_house_details_dto_to_model,
@@ -23,87 +34,49 @@ class ReportService(IReportService):
         self.report_repository = report_repository
 
     def fetch_building_details(self, address: str) -> CompleteHouseDetailsDTO:
-        print(f"Fetching building details for address: {address}")
+        print(f"Fetching address info for address: {address}")
+        address_info = self.building_service_client.get_address(address)
+        print(f"Address info: {address_info}")
+        if address_info is None:
+            raise ValueError("Address not found")
 
-    # Step 1: Autocomplete address
-        address_details_response = self.building_service_client.get_address_autocomplete(address)
-        if not address_details_response or address_details_response.status_code != 200:
-            print(f"Failed to autocomplete address. Response: {address_details_response}")
-            raise ValueError("Failed to autocomplete address: No results")
-
-        address_details = address_details_response.json()
-        print(f"Autocomplete address details: {address_details}")
-
-        if not address_details:
-            print("No address details found")
-            raise ValueError("Failed to get address details")
-
-        # Step 2: Fetch address details
-        address_id = address_details[0]['data']['id']
+        address_id = address_info.adgangsadresseid
         print(f"Address ID: {address_id}")
+        address_details = self.building_service_client.get_address_details(address_id)
+        print(f"Address details: {address_details}")
+        if address_details is None:
+            raise ValueError("Address details not found")
 
-        address_full_details_response = self.building_service_client.get_address_details(address_id)
-        if not address_full_details_response or address_full_details_response.status_code != 200:
-            print(f"Failed to get address details. Response: {address_full_details_response}")
-            raise ValueError("Failed to get address details")
-
-        address_full_details = address_full_details_response.json()
-        print(f"Full address details: {address_full_details}")
-
-        building_id = address_full_details.get('building_id', address_id)
+        building_id = address_details.adgangsadresseid
         print(f"Building ID: {building_id}")
-
-        # Step 3: Fetch building details
-        building_details_response = self.building_service_client.get_building_details(building_id)
-        if not building_details_response or building_details_response.status_code != 200:
-            print(f"Failed to get building details. Response: {building_details_response}")
-            raise ValueError("Failed to get building details")
-
-        building_details = building_details_response.json()
+        building_details = self.building_service_client.get_building_details(building_id)
         print(f"Building details: {building_details}")
+        if building_details is None:
+            raise ValueError("Building details not found")
 
-        # Step 4: Create DTO
-        complete_house_details_dto = CompleteHouseDetailsDTO(
-            id="generated_id",
-            address=address,
-            year_built=building_details.get('year_built', 2000),
-            total_area=building_details.get('total_area', 100),
-            number_of_buildings=building_details.get('number_of_buildings', 1),
-            owner_details=OwnerDetailsDTO(
-                name="John Doe",
-                contact_information="john.doe@example.com",
-                period_of_ownership="10 years",
-                construction_knowledge="Expert"
-            ),
-            hustype=HustypeDTO(
-                description="Residential",
-                type_id="1"
-            ),
-            varmeinstallation="CENTRAL",
-            ydervaegsmateriale="BRICK",
-            tagdaekningsmateriale="TILE",
-            bygningens_anvendelse="RESIDENTIAL",
-            kilde_til_bygningens_materialer="LOCAL",
-            supplerende_varme="NONE",
-            basement_present=True,
-            building_components=[],
-            remarks="No remarks",
-            inspection_date="2024-01-01",
-            inspector_name="Inspector Name",
-            inspector_signature="Inspector Signature"
+        complete_house_details = CompleteHouseDetailsDTO(
+            id=building_details.id,
+            address=f"{address_details.vejnavn} {address_details.husnr}, {address_details.postnr} {address_details.postnrnavn}",
+            year_built=building_details.byg026Opførelsesår,
+            total_area=building_details.byg038SamletBygningsareal,
+            number_of_buildings=building_details.byg054AntalEtager,
+            basement_present=bool(building_details.byg022Kælderareal) if hasattr(building_details, 'byg022Kælderareal') else None,
+            varmeinstallation=building_details.byg056Varmeinstallation,
+            ydervaegsmateriale=building_details.byg032YdervæggensMateriale,
+            tagdaekningsmateriale=building_details.byg033Tagdækningsmateriale,
+            bygningens_anvendelse=building_details.byg021BygningensAnvendelse,
+            kilde_til_bygningens_materialer=building_details.byg037KildeTilBygningensMaterialer,
+            supplerende_varme=building_details.byg058SupplerendeVarme
         )
 
-        print(f"Complete house details DTO: {complete_house_details_dto}")
-        return complete_house_details_dto
-
+        return complete_house_details
+    
     def generate_inspector_report(self, inspector_report_data: InspectorReportDTO) -> InspectorReportDTO:
         try:
             customer_report = self.report_repository.get_customer_report_by_id(inspector_report_data.customer_report_id)
-
             if not customer_report:
                 raise ValueError("Customer report not found")
 
-            # Fortsæt med behandlingen som krævet
             inspector_report = convert_inspector_report_dto_to_model(inspector_report_data)
             self.report_repository.save_inspector_report(inspector_report)
 
@@ -173,11 +146,8 @@ class ReportService(IReportService):
     def submit_customer_report(self, data: CustomerReportDTO) -> str:
         logging.info("Submitting customer report")
         try:
-            # Convert DTO to model
             customer_report = convert_customer_report_dto_to_model(data)
-            # Save the customer report in the repository
             saved_report = self.report_repository.save_customer_report(customer_report)
-            # Return the ID of the saved report
             return str(saved_report.id)
         except Exception as e:
             logging.error(f"Error submitting customer report: {e}")
@@ -186,7 +156,6 @@ class ReportService(IReportService):
     def delete_customer_report(self, report_id: str):
         logging.info(f"Deleting customer report with id: {report_id}")
         try:
-            # Delete the customer report from the repository
             self.report_repository.delete_customer_report(report_id)
         except Exception as e:
             logging.error(f"Error deleting customer report: {e}")
